@@ -14,9 +14,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\js\mousePosistion.js" />
-    <None Include="wwwroot\js\playersOverlay.js" />
-    <None Include="wwwroot\js\tweens.js" />
+    <None Include="wwwroot\js\mousePosistion.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="wwwroot\js\playersOverlay.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="wwwroot\js\tweens.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
