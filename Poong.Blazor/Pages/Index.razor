@@ -1,0 +1,6 @@
+﻿@page "/{Name?}"
+@using Poong.Blazor.Shared
+    <GameComponent Name="@Name"></GameComponent>
+@code{
+    [Parameter] public string Name { get; set; }
+}

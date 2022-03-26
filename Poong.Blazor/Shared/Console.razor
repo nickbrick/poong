@@ -1,0 +1,14 @@
+﻿<ul class="console" style=" position: absolute; color: white; background-color: black; left: 0px; top: 0px;">
+    @foreach (var item in ReverseLog)
+    {
+        <li>@item</li>
+    }
+</ul>
+
+@code {
+    [Parameter] public Queue<string> Log { get; set; }
+    private List<string> ReverseLog { get { List<string> l = Log.ToList(); l.Reverse(); return l; } }
+    protected override async Task OnParametersSetAsync()
+    {
+    }
+}

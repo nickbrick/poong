@@ -1,0 +1,27 @@
+﻿@inject IJSRuntime jsRuntime
+@using Poong.Blazor
+<div id="@Id" class="body "
+     style="@Style">
+</div>
+@code {
+    [Parameter] public string Id { get; set; }
+    [Parameter] public float Height { get; set; }
+    [Parameter] public float Width { get; set; }
+    [Parameter] public float Left { get; set; }
+    [Parameter] public float Top { get; set; }
+    [Parameter] public float? TargetLeft { get; set; }
+    [Parameter] public float? TargetTop { get; set; }
+    [Parameter] public float? TargetTime { get; set; }
+
+    public Body() { }
+    public string Style => $"height:{Height}%;width:{Width}%;left:{Left}%;top:{Top}%;";
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (TargetLeft != null && TargetTop != null && TargetTime != null)
+        {
+            await jsRuntime.InvokeVoidAsync("startTweenAnimation", new object[] { Id, Left, Top, TargetLeft, TargetTop, TargetTime });
+        }
+    }
+
+}

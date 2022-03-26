@@ -1,0 +1,116 @@
+﻿@implements IDisposable
+@inject IJSRuntime JsRuntime
+@using Poong.Blazor.Shared
+<Console Log="@ViewModel.Log"></Console>
+<div class="main backdrop">
+    <div id="board" class="board" style="">
+        <Body Id="left-paddle"
+              Height="@ViewModel.LeftPaddle.Height"
+              Width="@ViewModel.LeftPaddle.Width"
+              Left="@ViewModel.LeftPaddle.Left"
+              Top="@ViewModel.LeftPaddle.Top"
+              TargetLeft="@ViewModel.LeftPaddle.TargetLeft.GetValueOrDefault()"
+              TargetTop="@ViewModel.LeftPaddle.TargetTop.GetValueOrDefault()"
+              TargetTime="@ViewModel.LeftPaddle.TargetTime.GetValueOrDefault()">
+        </Body>
+        <Body Id="right-paddle"
+              Height="@ViewModel.RightPaddle.Height"
+              Width="@ViewModel.RightPaddle.Width"
+              Left="@ViewModel.RightPaddle.Left"
+              Top="@ViewModel.RightPaddle.Top"
+              TargetLeft="@ViewModel.RightPaddle.TargetLeft.GetValueOrDefault()"
+              TargetTop="@ViewModel.RightPaddle.TargetTop.GetValueOrDefault()"
+              TargetTime="@ViewModel.RightPaddle.TargetTime.GetValueOrDefault()">
+        </Body>
+        <Body Id="ball-0"
+              Height="@ViewModel.Balls.First().Height"
+              Width="@ViewModel.Balls.First().Width"
+              Left="@ViewModel.Balls.First().Left"
+              Top="@ViewModel.Balls.First().Top"
+              TargetLeft="@ViewModel.Balls.First().TargetLeft.GetValueOrDefault()"
+              TargetTop="@ViewModel.Balls.First().TargetTop.GetValueOrDefault()"
+              TargetTime="@ViewModel.Balls.First().TargetTime.GetValueOrDefault()">
+        </Body>
+        @*@foreach (var player in ViewModel.Players)
+            {
+                <PlayerTag Player="player"
+                           TargetTime="@ViewModel.PlayerTweenTime">
+                </PlayerTag>
+            }*@
+    </div>
+    <canvas id="players-overlay" class="players-overlay">
+    </canvas>
+</div>
+@using Poong.Engine;
+@using System.Drawing;
+@using System.Threading;
+@code {
+    [Parameter] public string Name { get; set; }
+    [Inject]
+    public IJSRuntime JSRuntime { get; set; }
+    public ViewModel ViewModel = new ViewModel();
+    public GameComponent()
+    {
+
+    }
+    public async void Client_StateChanged(object sender, GameStateEventArgs e)
+    {
+        try
+        {
+            ViewModel.Update(e.State);
+
+            //    if (e.Players != null)
+            //        players = e.Players.Select(player => new Point((int)player.Position.X, (int)player.Position.Y)).ToList();
+            ViewModel.Client.TryGiveInput(ViewModel.LastMousePosition.X, ViewModel.LastMousePosition.Y);
+            await JSRuntime.InvokeVoidAsync("paintPlayersOverlayCanvas", ViewModel.Players);
+
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception ex)
+        {
+            //System.Diagnostics.Debug.WriteLine(ex);
+        }
+    }
+    protected override void OnInitialized()
+    {
+        System.Diagnostics.Debug.WriteLine("MA<E =" + Name);
+        ViewModel.Game = Program.Game;
+        ViewModel.Client = ViewModel.Game.Join(
+        50.0f,
+        50.0f,
+        50.0f,
+        50.0f,
+        Name);
+        ViewModel.Update(ViewModel.Client.State);
+        ViewModel.Client.StateChanged += Client_StateChanged;
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await InitGameComponentInstance();
+            await InitPlayersOverlayCanvas();
+        }
+    }
+
+    private async Task InitGameComponentInstance()
+    {
+        var dotNetObjRef = DotNetObjectReference.Create(this);
+        await JSRuntime.InvokeVoidAsync("registerGameComponentObject", dotNetObjRef);
+    }
+    private async Task InitPlayersOverlayCanvas()
+    {
+        await JSRuntime.InvokeVoidAsync("initPlayersOverlayCanvas");
+    }
+    [JSInvokable]
+    public void SetMousePosition(PointF point)
+    {
+        ViewModel.LastMousePosition = point; // TODO overpost protection?
+        StateHasChanged();
+    }
+    void IDisposable.Dispose()
+    {
+        ViewModel.Game.Disconnect(ViewModel.Client);
+        System.Diagnostics.Debug.WriteLine($"{ViewModel.Client.Player.Name} disconnected.");
+    }
+}
