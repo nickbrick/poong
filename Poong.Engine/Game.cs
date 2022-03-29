@@ -17,7 +17,7 @@ namespace Poong.Engine
         public event EventHandler<PlayerEventArgs> ClientDisconnected;
 
         public const float TickMilliseconds = 20.0f;
-        public const int TicksPerUpdate = 10;
+        public const int TicksPerUpdate = 5;
 
         internal const float pixelSize = 0.04f;
         internal const float verticalHalfSize = 1.0f;
