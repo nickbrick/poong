@@ -31,8 +31,8 @@ namespace Poong.Engine
 
         internal const int maxPlayersPerPaddle = 512;
 
-        private bool useBoids = false;
-        private int boidsPerPaddle = 2;
+        private bool useBoids = true;
+        private int boidsPerPaddle = 16;
         private Flock leftFlock;
         private Flock rightFlock;
         private readonly Timer clock;
