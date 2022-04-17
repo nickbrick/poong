@@ -4,15 +4,18 @@
     window.ctx.strokeStyle = 'red';
     window.ctx.fillStyle = 'red';
     window.ctx.font = '16px monospace';
-    window.setInterval(function () {
+    window.playerTimer = window.setInterval(function () {
         drawPlayers();
-        updatePlayerPositions();
+        stepPlayerPositions();
     }, 20);
 }
-function paintPlayersOverlayCanvas(players) {
+function setPlayersKeyframe(players) {
+    delete window.players;
     window.players = players;
 }
-
+function printPlayers() {
+    console.log(window.players);
+}
 function drawPlayers() {
     ctx = window.ctx;
     ctx.clearRect(0, 0, window.clientSizes.ClientWidth, window.clientSizes.ClientHeight);
@@ -25,7 +28,7 @@ function drawPlayers() {
         ctx.stroke();
     }
 }
-function updatePlayerPositions() {
+function stepPlayerPositions() {
     for (var i = 0, len = window.players.length; i < len; i++) {
         window.players[i].lastPosition.x += window.players[i].speed.x;
         window.players[i].lastPosition.y += window.players[i].speed.y;

@@ -108,6 +108,7 @@ namespace Poong.Blazor
                 //leftPlayersLabel.Text = String.Join("\n", players.Where(player => player.Side == Side.Left).Select(player => $"{player.Name}({player.Score})"));
                 //rightPlayersLabel.Text = String.Join("\n", players.Where(player => player.Side == Side.Right).Select(player => $"{player.Name}({player.Score})"));
                 LogMessage($"Players: {Players.Count(player => player.Side == Side.Left)} left, {Players.Count(player => player.Side == Side.Right)} right. You are {Client.Player.Name} and your side is {Client.Player.Side}.");
+                LogMessage($"Left players: {String.Join(", ", gameState.Players.Where(player => player.Side == Side.Left).Select(p=>p.Name))}");
             }
             PlayerPositions = gameState.PlayerPositions;//.Select(position => new Point((int)position.X, (int)position.Y)).ToList();
             if (gameState.PlayerPositions != null)
@@ -118,7 +119,7 @@ namespace Poong.Blazor
                     Players[i].Position = PlayerPositions[i];
                 }
             }
-            Client.TryGiveInput(LastMousePosition.X, LastMousePosition.Y); // TODO invoke js to read browser last position??? 
+            Client.TryGiveInput(LastMousePosition.X, LastMousePosition.Y);
             //TODO still need time since input for kicking inactive
 
         }
@@ -126,7 +127,7 @@ namespace Poong.Blazor
         {
             public string Id;
             public string Name;
-            public string DisplayName => IsTopTen ? $"{Name} ({Score})" : "";
+            public string DisplayName => IsTopTen || true ? $"{Name} ({Score})" : "";
             public Point Position;
             public Point LastPosition { get; set; }
             public Vector Speed => (Vector)(Position - LastPosition) / Game.TicksPerUpdate;

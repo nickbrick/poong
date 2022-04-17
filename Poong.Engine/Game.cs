@@ -27,12 +27,12 @@ namespace Poong.Engine
         internal const float paddleInitialLength = Game.pixelSize * 10.0f;
         internal const float paddleDecay = pixelSize;
         internal const float powerPaddleLengthThrehsold = 0;
-        internal const float powerPaddleVerticalDeflectSpeed = 0.1f;
+        internal const float powerPaddleVerticalDeflectSpeed = 0.2f;
 
         internal const int maxPlayersPerPaddle = 512;
 
         private bool useBoids = true;
-        private int boidsPerPaddle = 16;
+        private int boidsPerPaddle = 4;
         private Flock leftFlock;
         private Flock rightFlock;
         private readonly Timer clock;
@@ -46,7 +46,7 @@ namespace Poong.Engine
         private List<Player> AllPlayers { get; set; }
         private List<Player> LeftPlayers => AllPlayers.Where(player => player.Side == Side.Left).ToList();
         private List<Player> RightPlayers => AllPlayers.Where(player => player.Side == Side.Right).ToList();
-        private List<Player> AlivePlayers => LeftPlayers.Union(RightPlayers).ToList();
+        private List<Player> AlivePlayers => LeftPlayers.Union(RightPlayers).OrderBy(player => player.Id).ToList();
         private int PlayerCount => AllPlayers.Count;
         private int AlivePlayerCount => AllPlayers.Count(player => player.Side != Side.None);
         private int LeftPlayerCount => AllPlayers.Count(player => player.Side == Side.Left);
@@ -134,7 +134,7 @@ namespace Poong.Engine
                 if (phase == GamePhase.PreGame && AllPlayers.Count < 2) phaseTime += 1;
                 if (phaseTime == 0)
                 {
-                    Game_GamePhaseEnded(this, this.phase);
+                    //Game_GamePhaseEnded(this, this.phase);
                     if (nextPhase.TryDequeue(out var phase))
                         ChangePhase(phase);
                 }
@@ -163,6 +163,7 @@ namespace Poong.Engine
         private void ChangePhase(GamePhase phase, GamePhase[] nextPhases = null)
         {
             prevPhase = this.phase;
+            Game_GamePhaseEnded(this, prevPhase);
             switch (phase)
             {
                 case GamePhase.PreGame:
@@ -281,7 +282,7 @@ namespace Poong.Engine
             }
 
             NextFragment.Round = round;
-            NextFragment.Players = AlivePlayers.OrderByDescending(player => player.Score).ToList();
+            NextFragment.Players = AlivePlayers.ToList();
             NextFragment.LeftPaddleLength = leftPaddle.Length;
             NextFragment.RightPaddleLength = rightPaddle.Length;
         }
@@ -310,6 +311,12 @@ namespace Poong.Engine
                         leftFlock.Boids = LeftPlayers.Select(player => new Boid(player)).ToList();
                         rightFlock.Boids = RightPlayers.Select(player => new Boid(player)).ToList();
                     }
+                    break;
+                case GamePhase.Ready:
+                    AllPlayers.ForEach(player => player.RoundStartPosition = player.Position);
+                    break;
+                case GamePhase.Playing:
+                    AllPlayers.Where(player => player.Side != Side.None && ((Vector)(player.RoundStartPosition - player.Position)).Magnitude <= Single.Epsilon).ToList().ForEach(player => Debug.WriteLine("Player inactive: " + player.Name));
                     break;
             }
         }
@@ -420,7 +427,7 @@ namespace Poong.Engine
                         BallCollided(ball, new BallEventArgs(Collisions.RightPaddleSide));
         }
         private void DeflectBallOffPaddleFace(Ball ball, Paddle paddle)
-        {
+        { // TODO out of bounds bug
             var distance = paddle.GetNormalizedDistanceFromCenter(ball);
             if (-1.0f < distance && distance < 1.0f)
             {

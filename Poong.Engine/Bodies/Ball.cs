@@ -4,7 +4,7 @@ namespace Poong.Engine
 {
     public class Ball : Body
     {
-        private const float InitialSpeed = 0.01f;
+        private const float InitialSpeed = 0.02f;
         internal event EventHandler<BoundaryTouchingEventArgs> BoundaryTouching;
         private Boundaries LastBoundaries = Boundaries.None;
         internal Ball()

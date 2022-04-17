@@ -61,8 +61,11 @@
 
             //    if (e.Players != null)
             //        players = e.Players.Select(player => new Point((int)player.Position.X, (int)player.Position.Y)).ToList();
-            ViewModel.Client.TryGiveInput(ViewModel.LastMousePosition.X, ViewModel.LastMousePosition.Y);
-            await JSRuntime.InvokeVoidAsync("paintPlayersOverlayCanvas", ViewModel.Players);
+            ViewModel.LastMousePosition = await GetBrowserLastMousePosition();
+            //ViewModel.Client.TryGiveInput(ViewModel.LastMousePosition.X, ViewModel.LastMousePosition.Y);
+            await JSRuntime.InvokeVoidAsync("setPlayersKeyframe", ViewModel.Players);
+            if (e.State.Players != null)
+                await JSRuntime.InvokeVoidAsync("printPlayers", ViewModel.Players);
 
             await InvokeAsync(StateHasChanged);
         }
@@ -102,11 +105,11 @@
     {
         await JSRuntime.InvokeVoidAsync("initPlayersOverlayCanvas");
     }
-    [JSInvokable]
-    public void SetMousePosition(PointF point)
+
+    public async Task<PointF> GetBrowserLastMousePosition()
     {
-        ViewModel.LastMousePosition = point; // TODO overpost protection?
-        StateHasChanged();
+        var p = await JSRuntime.InvokeAsync<PointF>("getLastMousePosition");
+        return p;
     }
     void IDisposable.Dispose()
     {
