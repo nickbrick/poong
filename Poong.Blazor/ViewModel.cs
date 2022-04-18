@@ -120,8 +120,6 @@ namespace Poong.Blazor
                 }
             }
             Client.TryGiveInput(LastMousePosition.X, LastMousePosition.Y);
-            //TODO still need time since input for kicking inactive
-
         }
         public class Player
         {
@@ -130,7 +128,7 @@ namespace Poong.Blazor
             public string DisplayName => IsTopTen || true ? $"{Name} ({Score})" : "";
             public Point Position;
             public Point LastPosition { get; set; }
-            public Vector Speed => (Vector)(Position - LastPosition) / Game.TicksPerUpdate;
+            public Vector Speed => (Position - LastPosition) / Game.TicksPerUpdate;
             public Side Side;
             public int Score { get; }
             public bool IsTopTen = false;

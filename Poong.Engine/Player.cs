@@ -21,8 +21,9 @@ namespace Poong.Engine
             Name = Id.ToString();
             Position = new Point(0);
             LastPosition = new Point(0);
+            RoundStartPosition = new Point(0);
         }
-        internal Player(string name) : this()
+    internal Player(string name) : this()
         {
             if (name != null)
                 Name = name;

@@ -9,6 +9,7 @@
         stepPlayerPositions();
     }, 20);
 }
+// TODO reinit canvas on resize
 function setPlayersKeyframe(players) {
     delete window.players;
     window.players = players;

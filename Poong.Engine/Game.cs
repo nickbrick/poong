@@ -42,7 +42,7 @@ namespace Poong.Engine
         private readonly Paddle leftPaddle;
         private readonly Paddle rightPaddle;
         private readonly List<Ball> balls;
-        private readonly System.Collections.Concurrent.ConcurrentDictionary<Guid,Client> clients = new System.Collections.Concurrent.ConcurrentDictionary<Guid, Client>();
+        private readonly System.Collections.Concurrent.ConcurrentDictionary<Guid, Client> clients = new System.Collections.Concurrent.ConcurrentDictionary<Guid, Client>();
         private List<Player> AllPlayers { get; set; }
         private List<Player> LeftPlayers => AllPlayers.Where(player => player.Side == Side.Left).ToList();
         private List<Player> RightPlayers => AllPlayers.Where(player => player.Side == Side.Right).ToList();
@@ -313,10 +313,14 @@ namespace Poong.Engine
                     }
                     break;
                 case GamePhase.Ready:
-                    AllPlayers.ForEach(player => player.RoundStartPosition = player.Position);
+                    clients.Select(client => client.Value.Player).ToList().ForEach(player => player.RoundStartPosition = player.Position);
                     break;
                 case GamePhase.Playing:
-                    AllPlayers.Where(player => player.Side != Side.None && ((Vector)(player.RoundStartPosition - player.Position)).Magnitude <= Single.Epsilon).ToList().ForEach(player => Debug.WriteLine("Player inactive: " + player.Name));
+                    var inactiveClients = clients.Where(kv => 
+                        kv.Value.Player.Side != Side.None
+                        && (kv.Value.Player.RoundStartPosition - kv.Value.Player.Position).Magnitude <= Single.Epsilon)
+                    .ToList();
+                    inactiveClients.ForEach(kv => Disconnect(kv.Value));
                     break;
             }
         }
@@ -343,7 +347,7 @@ namespace Poong.Engine
             client.State = GetFullStateFragment();
             PlayerJoined?.Invoke(this, new PlayerEventArgs(client.Player));
             Debug.WriteLine($"players: {LeftPlayerCount} left, {RightPlayerCount} right, {AllPlayers.Count(player => player.Side == Side.None)} dead");
-            clients.GetOrAdd(client.Player.Id,client); // Need to send full state to client before adding the client to game
+            clients.GetOrAdd(client.Player.Id, client); // Need to send full state to client before adding the client to game
             return client;
         }
         public void Disconnect(Client client)
