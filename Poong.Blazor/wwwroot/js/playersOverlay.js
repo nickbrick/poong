@@ -1,15 +1,21 @@
 ﻿initPlayersOverlayCanvas = function () {
     c = document.getElementById("players-overlay");
-    window.ctx = c.getContext("2d");
-    window.ctx.strokeStyle = 'red';
-    window.ctx.fillStyle = 'red';
-    window.ctx.font = '16px monospace';
+    setContextStyles();
+    window.addEventListener('resize', function (e) {
+        setContextStyles();
+    });
     window.playerTimer = window.setInterval(function () {
         drawPlayers();
         stepPlayerPositions();
     }, 20);
 }
-// TODO reinit canvas on resize
+setContextStyles = function () {
+    window.ctx = c.getContext("2d");
+    window.ctx.strokeStyle = 'red';
+    window.ctx.fillStyle = 'red';
+    window.ctx.font = '16px monospace';
+}
+
 function setPlayersKeyframe(players) {
     delete window.players;
     window.players = players;
