@@ -31,6 +31,7 @@ namespace Poong.Engine
 
         internal const int maxPlayersPerPaddle = 512;
 
+        private bool kickAfk = false;
         private bool useBoids = true;
         private int boidsPerPaddle = 4;
         private Flock leftFlock;
@@ -215,7 +216,9 @@ namespace Poong.Engine
         private void Game_BallCollided(object sender, BallEventArgs e)
         {
             Ball ball = (Ball)sender;
-            if (e.Collisions.HasAnyFlag(Collisions.TopBoundary | Collisions.BottomBoundary))
+            if (e.Collisions.HasAnyFlag(Collisions.TopBoundary) && ball.Speed.Y < 0)
+                ball.Speed.FlipY();
+            if (e.Collisions.HasAnyFlag(Collisions.BottomBoundary) && ball.Speed.Y > 0)
                 ball.Speed.FlipY();
             if (e.Collisions.HasAnyFlag(Collisions.LeftPaddleFace))
             {
@@ -233,10 +236,13 @@ namespace Poong.Engine
                     ball.Speed.Y = MathF.CopySign(powerPaddleVerticalDeflectSpeed, ball.Speed.Y);
                 NextFragment.RightPaddleLength = rightPaddle.Length;
             }
+
             if (e.Collisions.HasAnyFlag(Collisions.LeftPaddleSide))
                 DeflectBallOffPaddleSide(ball, leftPaddle);
             if (e.Collisions.HasAnyFlag(Collisions.RightPaddleSide))
                 DeflectBallOffPaddleSide(ball, rightPaddle);
+
+
             if (e.Collisions.HasAnyFlag(Collisions.LeftGoal | Collisions.RightGoal))
             {
                 ball.Speed.FlipX();
@@ -244,7 +250,7 @@ namespace Poong.Engine
                 if (e.Collisions.HasFlag(Collisions.RightGoal)) Game_GoalScored(Side.Right);
 
             }
-            System.Diagnostics.Debug.WriteLine("collided with " + e.Collisions.ToString());
+            System.Diagnostics.Debug.WriteLine($"T {gameTime} {e.Collisions.ToString()} {(balls.First().Speed.Y > 0f ? "🔽":"🔼")}");
             NextFragment.BallPositions = balls.Select(ball => ball.Corner).ToList();
             NextFragment.BallSpeeds = balls.Select(ball => ball.Speed).ToList();
         }
@@ -320,7 +326,8 @@ namespace Poong.Engine
                         kv.Value.Player.Side != Side.None
                         && (kv.Value.Player.RoundStartPosition - kv.Value.Player.Position).Magnitude <= Single.Epsilon)
                     .ToList();
-                    inactiveClients.ForEach(kv => Disconnect(kv.Value));
+                    if (kickAfk)
+                        inactiveClients.ForEach(kv => Disconnect(kv.Value));
                     break;
             }
         }
