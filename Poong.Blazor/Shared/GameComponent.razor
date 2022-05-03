@@ -103,7 +103,7 @@
     }
     private async Task InitPlayersOverlayCanvas()
     {
-        await JSRuntime.InvokeVoidAsync("initPlayersOverlayCanvas");
+        await JSRuntime.InvokeVoidAsync("initPlayersOverlayCanvas", Game.TickMilliseconds );
     }
 
     public async Task<PointF> GetBrowserLastMousePosition()

@@ -438,7 +438,7 @@ namespace Poong.Engine
                         BallCollided(ball, new BallEventArgs(Collisions.RightPaddleSide));
         }
         private void DeflectBallOffPaddleFace(Ball ball, Paddle paddle)
-        { // TODO out of bounds bug
+        {
             var distance = paddle.GetNormalizedDistanceFromCenter(ball);
             if (-1.0f < distance && distance < 1.0f)
             {

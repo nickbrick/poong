@@ -1,4 +1,4 @@
-﻿initPlayersOverlayCanvas = function () {
+﻿initPlayersOverlayCanvas = function (interval) {
     c = document.getElementById("players-overlay");
     setContextStyles();
     window.addEventListener('resize', function (e) {
@@ -7,7 +7,7 @@
     window.playerTimer = window.setInterval(function () {
         drawPlayers();
         stepPlayerPositions();
-    }, 20); //TODO parametrize interval if possible
+    }, interval);
 }
 setContextStyles = function () {
     window.ctx = c.getContext("2d");
