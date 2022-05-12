@@ -125,7 +125,7 @@ namespace Poong.Blazor
         {
             public string Id;
             public string Name;
-            public string DisplayName => IsTopTen || true ? $"{Name} ({Score})" : "";
+            public string DisplayName => IsTopTen || Game.Config.RenderAllNames ? $"{Name} ({Score})" : "";
             public Point Position;
             public Point LastPosition { get; set; }
             public Vector Speed => (Position - LastPosition) / Game.Config.TicksPerUpdate;

@@ -12,6 +12,7 @@
   "MaxPlayersPerPaddle": 512,
   "KickAfk": false,
   "UseBoids": true,
-  "BoidsPerPaddle": 40,
+  "RenderAllNames": false,
+  "BoidsPerPaddle": 100,
   "BallInitialSpeed": "0.02"
 }

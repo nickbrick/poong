@@ -19,6 +19,7 @@ namespace Poong.Engine
         public int MaxPlayersPerPaddle = 512;
         public bool KickAfk = false;
         public bool UseBoids = true;
+        public bool RenderAllNames = false;
         public int BoidsPerPaddle = 4;
 
         public float BallInitialSpeed = 0.02f;
