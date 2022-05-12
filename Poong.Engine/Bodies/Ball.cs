@@ -4,11 +4,10 @@ namespace Poong.Engine
 {
     public class Ball : Body
     {
-        private const float InitialSpeed = 0.02f;
         internal event EventHandler<BoundaryTouchingEventArgs> BoundaryTouching;
         private Boundaries LastBoundaries = Boundaries.None;
         internal Ball()
-            : base(new Point(0, 0.0f), new Size(Game.pixelSize), new Vector(0))
+            : base(new Point(0, 0.0f), new Size(Game.Config.PixelSize), new Vector(0))
         {
         }
         internal Ball(Point position, Size size, Vector speed)
@@ -30,29 +29,29 @@ namespace Poong.Engine
         internal void Launch(Side side)
         {
             int sign = side == Side.None ? new Random().Next(2) * 2 - 1 : side == Side.Right?1:-1;
-            Speed.X = InitialSpeed * sign;
+            Speed.X = Game.Config.BallInitialSpeed * sign;
             Speed.Y = 0;
         }
     private Boundaries GetBoundariesTouching()
         {
             Boundaries boundaries = Boundaries.None;
 
-            if (Bottom > Game.verticalHalfSize && Speed.Y > 0)
+            if (Bottom > Game.Config.VerticalHalfSize && Speed.Y > 0)
                 boundaries |= Boundaries.BottomBoundary;
-            else if (Top < -Game.verticalHalfSize && Speed.Y < 0)
+            else if (Top < -Game.Config.VerticalHalfSize && Speed.Y < 0)
                 boundaries |= Boundaries.TopBoundary;
 
-            if (Left < -Game.horizontalHalfSize && Speed.X < 0)
+            if (Left < -Game.Config.HorizontalHalfSize && Speed.X < 0)
                 boundaries |= Boundaries.LeftGoal;
-            else if (Left < -Game.paddleFaceDistance
-                && Right > -Game.paddleFaceDistance - Game.pixelSize
+            else if (Left < -Game.Config.PaddleFaceDistance
+                && Right > -Game.Config.PaddleFaceDistance - Game.Config.PixelSize
                 && Speed.X < 0)
                 boundaries |= Boundaries.LeftPaddle;
-            else if (Right > Game.paddleFaceDistance
-                && Left < Game.paddleFaceDistance + Game.pixelSize
+            else if (Right > Game.Config.PaddleFaceDistance
+                && Left < Game.Config.PaddleFaceDistance + Game.Config.PixelSize
                 && Speed.X > 0)
                 boundaries |= Boundaries.RightPaddle;
-            else if (Right > Game.horizontalHalfSize && Speed.X > 0)
+            else if (Right > Game.Config.HorizontalHalfSize && Speed.X > 0)
                 boundaries |= Boundaries.RightGoal;
 
             return boundaries;
@@ -61,13 +60,9 @@ namespace Poong.Engine
         {
             base.Update(time);
             var currentBoundary = GetBoundariesTouching();
-            //BoundaryTouching(this, new BoundaryTouchingEventArgs(Boundaries.RightPaddleFace));
             if (currentBoundary != Boundaries.None)
             {
                 BoundaryTouching(this, new BoundaryTouchingEventArgs(currentBoundary, LastBoundaries));
-                //if (lastBoundaries != currentBoundary)
-                //    System.Diagnostics.Debug.WriteLine(currentBoundary.ToString());
-
             }
             LastBoundaries = currentBoundary;
         }
@@ -85,7 +80,6 @@ namespace Poong.Engine
             {
                 return Boundaries.HasFlag(boundary) && !LastBoundaries.HasFlag(boundary);
             }
-
         }
     }
 }

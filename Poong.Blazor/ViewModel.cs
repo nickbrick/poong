@@ -22,7 +22,7 @@ namespace Poong.Blazor
         public List<Body> Balls = new List<Body>();
         public List<Vector> BallSpeeds = new List<Vector>();
         public List<Point> PlayerPositions = new List<Point>();
-        public float PlayerTweenTime = Game.TickMilliseconds * Game.TicksPerUpdate;
+        public float PlayerTweenTime => Game.Config.TickMilliseconds * Game.Config.TicksPerUpdate;
         public int Round;
         public GamePhase Phase;
 
@@ -128,7 +128,7 @@ namespace Poong.Blazor
             public string DisplayName => IsTopTen || true ? $"{Name} ({Score})" : "";
             public Point Position;
             public Point LastPosition { get; set; }
-            public Vector Speed => (Position - LastPosition) / Game.TicksPerUpdate;
+            public Vector Speed => (Position - LastPosition) / Game.Config.TicksPerUpdate;
             public Side Side;
             public int Score { get; }
             public bool IsTopTen = false;
@@ -155,8 +155,8 @@ namespace Poong.Blazor
             public void CalculateTarget(float projectionTime)
             {
                 TargetTime = projectionTime;
-                TargetLeft = Left + TargetTime / Game.TickMilliseconds * Speed.Magnitude * MathF.Cos(Speed.Angle);
-                TargetTop = Top + TargetTime / Game.TickMilliseconds * Speed.Magnitude * MathF.Sin(Speed.Angle);
+                TargetLeft = Left + TargetTime / Game.Config.TickMilliseconds * Speed.Magnitude * MathF.Cos(Speed.Angle);
+                TargetTop = Top + TargetTime / Game.Config.TickMilliseconds * Speed.Magnitude * MathF.Sin(Speed.Angle);
             }
         }
         public struct Dimensions

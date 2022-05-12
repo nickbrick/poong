@@ -16,12 +16,12 @@ namespace Poong.Engine
         }
         internal Paddle(Side side, float length)
             : base(
-                  new Vector(side == Side.Left ? -Game.paddleFaceDistance - Game.pixelSize / 2.0f : Game.paddleFaceDistance + Game.pixelSize / 2.0f, 0),
-                  new Size(Game.pixelSize, length),
+                  new Vector(side == Side.Left ? -Game.Config.PaddleFaceDistance - Game.Config.PixelSize / 2.0f : Game.Config.PaddleFaceDistance + Game.Config.PixelSize / 2.0f, 0),
+                  new Size(Game.Config.PixelSize, length),
                   new Vector(0)
                   )
         {
-            Players = new List<Player>(Game.maxPlayersPerPaddle);
+            Players = new List<Player>(Game.Config.MaxPlayersPerPaddle);
         }
         internal float GetNormalizedDistanceFromCenter(Ball ball)
         {

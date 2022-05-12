@@ -16,24 +16,8 @@ namespace Poong.Engine
         public event EventHandler<PlayerEventArgs> PlayerJoined;
         public event EventHandler<PlayerEventArgs> ClientDisconnected;
 
-        public const float TickMilliseconds = 20.0f;
-        public const int TicksPerUpdate = 5;
+        public static Configuration Config { get; private set; }
 
-        internal const float pixelSize = 0.04f;
-        internal const float verticalHalfSize = 1.0f;
-        internal const float paddleFaceDistance = 0.89f;
-        internal const float horizontalHalfSize = 1.3f;
-
-        internal const float paddleInitialLength = Game.pixelSize * 10.0f;
-        internal const float paddleDecay = pixelSize;
-        internal const float powerPaddleLengthThrehsold = 0;
-        internal const float powerPaddleVerticalDeflectSpeed = 0.2f;
-
-        internal const int maxPlayersPerPaddle = 512;
-
-        private bool kickAfk = false;
-        private bool useBoids = true;
-        private int boidsPerPaddle = 4;
         private Flock leftFlock;
         private Flock rightFlock;
         private readonly Timer clock;
@@ -43,7 +27,8 @@ namespace Poong.Engine
         private readonly Paddle leftPaddle;
         private readonly Paddle rightPaddle;
         private readonly List<Ball> balls;
-        private readonly System.Collections.Concurrent.ConcurrentDictionary<Guid, Client> clients = new System.Collections.Concurrent.ConcurrentDictionary<Guid, Client>();
+        private readonly System.Collections.Concurrent.ConcurrentDictionary<Guid, Client> clients =
+                     new System.Collections.Concurrent.ConcurrentDictionary<Guid, Client>();
         private List<Player> AllPlayers { get; set; }
         private List<Player> LeftPlayers => AllPlayers.Where(player => player.Side == Side.Left).ToList();
         private List<Player> RightPlayers => AllPlayers.Where(player => player.Side == Side.Right).ToList();
@@ -62,45 +47,45 @@ namespace Poong.Engine
         private Side lastGoalSide = Side.None;
         private int ongoingBroadcasts = 0;
 
-
-        public Game()
+        public Game() : this(new Configuration())
         {
-            leftPaddle = new Paddle(Side.Left, paddleInitialLength);
-            rightPaddle = new Paddle(Side.Right, paddleInitialLength);
+        }
+        public Game(Configuration config)
+        {
+            Config = config;
+            leftPaddle = new Paddle(Side.Left, Config.PaddleInitialLength);
+            rightPaddle = new Paddle(Side.Right, Config.PaddleInitialLength);
             balls = new List<Ball> { new Ball() };
             balls.ForEach(b => b.BoundaryTouching += Ball_BoundaryTouching);
 
-            //clients = new  List<Client>();
-            AllPlayers = new List<Player>(2 * Game.maxPlayersPerPaddle);
+            AllPlayers = new List<Player>(2 * Game.Config.MaxPlayersPerPaddle);
 
-            clock = new Timer(TickMilliseconds);
+            clock = new Timer(Config.TickMilliseconds);
             clock.Elapsed += Tick;
             BallCollided += Game_BallCollided;
 
-            Start();
-        }
-
-
-
-        private void Start()
-        {
-            clock.Enabled = true;
-            if (useBoids)
+            if (Config.UseBoids)
             {
                 leftFlock = new Flock();
                 rightFlock = new Flock();
-                for (int i = 0; i < boidsPerPaddle; i++)
+                for (int i = 0; i < Config.BoidsPerPaddle; i++)
                 {
                     leftFlock.Boids.Add(new Boid(JoinTeam(Side.Left)));
                     rightFlock.Boids.Add(new Boid(JoinTeam(Side.Right)));
                 }
             }
+
+            Start();
+        }
+        private void Start()
+        {
+            clock.Enabled = true;
         }
         private void BroadcastState()
         {
             if (ongoingBroadcasts > 0)
             {
-                Debug.WriteLine("skipping update");
+                Debug.WriteLine("Skipping update");
                 return;
             }
             ongoingBroadcasts += 1;
@@ -108,7 +93,6 @@ namespace Poong.Engine
             {
                 client.State = NextFragment;
             }
-            //clients. ForEach(client => { client.State = NextFragment; });
             NextFragment = new GameStateFragment();
             ongoingBroadcasts -= 1;
 
@@ -119,9 +103,9 @@ namespace Poong.Engine
             rightPaddle.Update(gameTime);
             balls.ForEach(b => b.Update(gameTime));
 
-            if (useBoids)
+            if (Config.UseBoids)
             {
-                leftFlock.X = leftPaddle.Center.X - (pixelSize * 6);
+                leftFlock.X = leftPaddle.Center.X - (Config.PixelSize * 6);
                 leftFlock.Y = (balls.First().Center.Y * 3 + leftPaddle.Center.Y) / 4;
                 leftFlock.Update();
 
@@ -141,7 +125,7 @@ namespace Poong.Engine
                 }
             }
 
-            if (gameTime % TicksPerUpdate == 0)
+            if (gameTime % Config.TicksPerUpdate == 0)
             {
                 LoadNextFragmentEssentials();
                 BroadcastState();
@@ -223,17 +207,17 @@ namespace Poong.Engine
             if (e.Collisions.HasAnyFlag(Collisions.LeftPaddleFace))
             {
                 DeflectBallOffPaddleFace(ball, leftPaddle);
-                leftPaddle.Length -= paddleDecay;
-                if (leftPaddle.Length <= powerPaddleLengthThrehsold)
-                    ball.Speed.Y = MathF.CopySign(powerPaddleVerticalDeflectSpeed, ball.Speed.Y);
+                leftPaddle.Length -= Config.PaddleDecay;
+                if (leftPaddle.Length <= Config.PowerPaddleLengthThrehsold)
+                    ball.Speed.Y = MathF.CopySign(Config.PowerPaddleVerticalDeflectSpeed, ball.Speed.Y);
                 NextFragment.LeftPaddleLength = leftPaddle.Length;
             }
             if (e.Collisions.HasAnyFlag(Collisions.RightPaddleFace))
             {
                 DeflectBallOffPaddleFace(ball, rightPaddle);
-                rightPaddle.Length -= paddleDecay;
-                if (rightPaddle.Length <= powerPaddleLengthThrehsold)
-                    ball.Speed.Y = MathF.CopySign(powerPaddleVerticalDeflectSpeed, ball.Speed.Y);
+                rightPaddle.Length -= Config.PaddleDecay;
+                if (rightPaddle.Length <= Config.PowerPaddleLengthThrehsold)
+                    ball.Speed.Y = MathF.CopySign(Config.PowerPaddleVerticalDeflectSpeed, ball.Speed.Y);
                 NextFragment.RightPaddleLength = rightPaddle.Length;
             }
 
@@ -250,7 +234,7 @@ namespace Poong.Engine
                 if (e.Collisions.HasFlag(Collisions.RightGoal)) Game_GoalScored(Side.Right);
 
             }
-            System.Diagnostics.Debug.WriteLine($"T {gameTime} {e.Collisions.ToString()} {(balls.First().Speed.Y > 0f ? "🔽":"🔼")}");
+            System.Diagnostics.Debug.WriteLine($"T {gameTime} {e.Collisions.ToString()} {(balls.First().Speed.Y > 0f ? "🔽" : "🔼")}");
             NextFragment.BallPositions = balls.Select(ball => ball.Corner).ToList();
             NextFragment.BallSpeeds = balls.Select(ball => ball.Speed).ToList();
         }
@@ -258,8 +242,8 @@ namespace Poong.Engine
         {
             lastGoalSide = goalSide;
             balls.ForEach(ball => ball.Reset());
-            leftPaddle.Length = paddleInitialLength;
-            rightPaddle.Length = paddleInitialLength;
+            leftPaddle.Length = Config.PaddleInitialLength;
+            rightPaddle.Length = Config.PaddleInitialLength;
 
             if (goalSide == Side.Left)
             {
@@ -312,7 +296,7 @@ namespace Poong.Engine
                     });
                     leftPaddle.Players = LeftPlayers;
                     rightPaddle.Players = RightPlayers;
-                    if (useBoids)
+                    if (Config.UseBoids)
                     {
                         leftFlock.Boids = LeftPlayers.Select(player => new Boid(player)).ToList();
                         rightFlock.Boids = RightPlayers.Select(player => new Boid(player)).ToList();
@@ -322,11 +306,11 @@ namespace Poong.Engine
                     clients.Select(client => client.Value.Player).ToList().ForEach(player => player.RoundStartPosition = player.Position);
                     break;
                 case GamePhase.Playing:
-                    var inactiveClients = clients.Where(kv => 
+                    var inactiveClients = clients.Where(kv =>
                         kv.Value.Player.Side != Side.None
                         && (kv.Value.Player.RoundStartPosition - kv.Value.Player.Position).Magnitude <= Single.Epsilon)
                     .ToList();
-                    if (kickAfk)
+                    if (Config.KickAfk)
                         inactiveClients.ForEach(kv => Disconnect(kv.Value));
                     break;
             }
@@ -391,7 +375,7 @@ namespace Poong.Engine
             AllPlayers.ForEach(player => { if (AllPlayers.IndexOf(player) < AlivePlayerCount / 2) player.Side = side; }); // half of the living players go the team that lost
             NextFragment.MinTopTenScore = MinTopTenScore;
             if (AlivePlayerCount == 1) AlivePlayers.Single().Score += 1 << round;
-            if (useBoids)
+            if (Config.UseBoids)
             {
                 if (side == Side.Left)
                 {
