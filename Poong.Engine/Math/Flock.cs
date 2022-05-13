@@ -10,6 +10,9 @@ namespace Poong.Engine
         public List<Boid> Boids { get; set; }
         public float X=0;
         public float Y=0;
+        public float Vx = 0;
+        public float Vy = 0;
+
         public Flock()
         {
             Boids = new List<Boid>();
@@ -17,6 +20,11 @@ namespace Poong.Engine
         public void Update()
         {
             // update void speed and direction (velocity) based on rules
+            if (Boids.Count > 0)
+            {
+                Vx = Boids.Average(boid => boid.Speed.X);
+                Vy = Boids.Average(boid => boid.Speed.Y);
+            }
             foreach (var boid in Boids)
             {
                 (float flockXvel, float flockYvel) = Converge(boid, boid.ConvergeDistance, boid.ConvergePower);
@@ -31,32 +39,41 @@ namespace Poong.Engine
         }
         private (float xVel, float yVel) Converge(Boid boid, float distance, float power)
         {
-            var neighbors = Boids.Where(x => x.GetDistance(boid) < distance);
-            float meanX = (X + neighbors.Sum(x => x.Center.X) / neighbors.Count()) / 2;
-            float meanY = (Y + neighbors.Sum(x => x.Center.Y) / neighbors.Count()) / 2;
+            //var neighbors = Boids.Where(x => x.GetDistance(boid) < distance);
+            //float meanX = (X + neighbors.Sum(x => x.Center.X) / neighbors.Count()) / 2;
+            //float meanY = (Y + neighbors.Sum(x => x.Center.Y) / neighbors.Count()) / 2;
+            float meanX = X;
+            float meanY = Y;
             float deltaCenterX = meanX - boid.Center.X;
             float deltaCenterY = meanY - boid.Center.Y;
             return (deltaCenterX * power, deltaCenterY * power);
         }
         private (float xVel, float yVel) Align(Boid boid, float distance, float power)
         {
-            var neighbors = Boids.Where(x => x.GetDistance(boid) < distance);
-            float meanXvel = neighbors.Sum(x => x.Speed.X) / neighbors.Count();
-            float meanYvel = neighbors.Sum(x => x.Speed.Y) / neighbors.Count();
+            //var neighbors = Boids.Where(x => x.GetDistance(boid) < distance);
+            //float meanXvel = neighbors.Sum(x => x.Speed.X) / neighbors.Count();
+            //float meanYvel = neighbors.Sum(x => x.Speed.Y) / neighbors.Count();
+            float meanXvel = Vx;
+            float meanYvel = Vy;
             float dXvel = meanXvel - boid.Speed.X;
             float dYvel = meanYvel - boid.Speed.Y;
             return (dXvel * power, dYvel * power);
         }
         private (float xVel, float yVel) Avoid(Boid boid, float distance, float power)
         {
-            var neighbors = Boids.Where(x => x.GetDistance(boid) < distance);
-            (float sumClosenessX, float sumClosenessY) = (0, 0);
-            foreach (var neighbor in neighbors)
-            {
-                float closeness = distance - boid.GetDistance(neighbor);
-                sumClosenessX += (boid.Center.X - neighbor.Center.X) * closeness;
-                sumClosenessY += (boid.Center.Y - neighbor.Center.Y) * closeness;
-            }
+            //var neighbors = Boids.Where(x => x.GetDistance(boid) < distance);
+            var offcenter = (float)(((Vector)(boid.Center - new Point(X, Y))).Magnitude);
+            var closeness = MathF.Max(1 - offcenter/distance, 0) ;
+            (float sumClosenessX, float sumClosenessY) = (
+                (float)(new Random().NextDouble()-0.5)/100* closeness,
+                (float)(new Random().NextDouble()-0.5)/100* closeness
+                );
+            //foreach (var neighbor in neighbors)
+            //{
+            //    float closeness = distance - boid.GetDistance(neighbor);
+            //    sumClosenessX += (boid.Center.X - neighbor.Center.X) * closeness;
+            //    sumClosenessY += (boid.Center.Y - neighbor.Center.Y) * closeness;
+            //}
             return (sumClosenessX * power, sumClosenessY * power);
         }
     }
