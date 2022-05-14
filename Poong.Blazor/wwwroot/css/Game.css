@@ -22,14 +22,6 @@
     background-color: white;
     position: absolute;
 }
-.tag {
-    position: absolute;
-    color: white;
-    opacity: 0.3;
-    display: list-item;
-    margin: -14px 14px;
-    white-space: nowrap;
-}
 
 .console {
     list-style: none;
@@ -43,7 +35,6 @@
 }
 
 .players-overlay {
-    border: red 1px solid;
     position: absolute;
     width: 100%;
     height: 100%;
