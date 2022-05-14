@@ -8,8 +8,8 @@ namespace Poong.Engine
     internal class Flock
     {
         public List<Boid> Boids { get; set; }
-        public float X=0;
-        public float Y=0;
+        public float X = 0;
+        public float Y = 0;
         public float Vx = 0;
         public float Vy = 0;
 
@@ -26,26 +26,26 @@ namespace Poong.Engine
             }
             foreach (var boid in Boids)
             {
-                (float flockXvel, float flockYvel) = Converge(boid, boid.ConvergeDistance, boid.ConvergePower);
-                (float alignXvel, float alignYvel) = Align(boid, boid.AlignDistance, boid.AlignPower);
-                boid.Speed.X += (flockXvel + alignXvel);
-                boid.Speed.Y += (flockYvel + alignYvel);
+                (float convergeVx, float convergeVy) = Converge(boid, boid.ConvergePower);
+                (float alignVx, float alignVy) = Align(boid, boid.AlignPower);
+                boid.Speed.X += (convergeVx + alignVx);
+                boid.Speed.Y += (convergeVy + alignVy);
                 boid.Speed.X = Math.Clamp(boid.Speed.X * 0.99f, -0.021f, 0.021f);
                 boid.Speed.Y = Math.Clamp(boid.Speed.Y * 0.99f, -0.021f, 0.021f);
                 boid.Update(0);
             }
         }
-        private (float xVel, float yVel) Converge(Boid boid, float distance, float power)
+        private (float Vx, float Vy) Converge(Boid boid, float power)
         {
-            float deltaCenterX = X + boid.FlockCenterOffset.X - boid.Center.X;
-            float deltaCenterY = Y + boid.FlockCenterOffset.Y - boid.Center.Y;
-            return (deltaCenterX * power, deltaCenterY * power);
+            float dVx = X + boid.FlockCenterOffset.X - boid.Center.X;
+            float dVy = Y + boid.FlockCenterOffset.Y - boid.Center.Y;
+            return (dVx * power, dVy * power);
         }
-        private (float xVel, float yVel) Align(Boid boid, float distance, float power)
+        private (float Vx, float Vy) Align(Boid boid, float power)
         {
-            float dXvel = Vx - boid.Speed.X;
-            float dYvel = Vy - boid.Speed.Y;
-            return (dXvel * power, dYvel * power);
+            float dVx = Vx - boid.Speed.X;
+            float dVy = Vy - boid.Speed.Y;
+            return (dVx * power, dVy * power);
         }
     }
 }

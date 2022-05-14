@@ -7,9 +7,6 @@ namespace Poong.Engine
     internal class Boid : Body
     {
         public Player Player { get; set; }
-        public float ConvergeDistance { get; set; }
-        public float AlignDistance { get; set; }
-        public float AvoidDistance { get; set; }
         public float ConvergePower { get; set; }
         public float AlignPower { get; set; }
         public float AvoidPower { get; set; }
@@ -18,9 +15,6 @@ namespace Poong.Engine
             : base(player.Position, new Size(0), new Vector(RollStat(0.01f, 0.5f), RollStat(0.01f, 0.5f)))
         {
             Player = player;
-            ConvergeDistance = RollStat(0.241f, 0.951f);
-            AlignDistance = RollStat(0.051f, 0.951f);
-            AvoidDistance = RollStat(0.06f, 0.951f);
             ConvergePower = RollStat(0.01f, 0.951f);
             AlignPower = RollStat(0.00f, 0.951f);
             AvoidPower = RollStat(10.1021f, 0.951f);
