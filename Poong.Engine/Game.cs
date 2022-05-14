@@ -398,9 +398,9 @@ namespace Poong.Engine
         {
             Ball ball = (Ball)sender;
 
-            if (e.FirstCrossedBoundary(Boundaries.TopBoundary))
+            if (e.Boundaries.HasFlag(Boundaries.TopBoundary))
                 BallCollided(ball, new BallEventArgs(Collisions.TopBoundary));
-            if (e.FirstCrossedBoundary(Boundaries.BottomBoundary))
+            if (e.Boundaries.HasFlag(Boundaries.BottomBoundary))
                 BallCollided(ball, new BallEventArgs(Collisions.BottomBoundary));
             if (e.FirstCrossedBoundary(Boundaries.LeftGoal))
                 BallCollided(ball, new BallEventArgs(Collisions.LeftGoal));
