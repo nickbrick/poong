@@ -13,6 +13,7 @@ namespace Poong.Engine
         public float ConvergePower { get; set; }
         public float AlignPower { get; set; }
         public float AvoidPower { get; set; }
+        public Point FlockCenterOffset { get; }
         public Boid(Player player)
             : base(player.Position, new Size(0), new Vector(RollStat(0.01f, 0.5f), RollStat(0.01f, 0.5f)))
         {
@@ -23,6 +24,7 @@ namespace Poong.Engine
             ConvergePower = RollStat(0.01f, 0.951f);
             AlignPower = RollStat(0.00f, 0.951f);
             AvoidPower = RollStat(10.1021f, 0.951f);
+            FlockCenterOffset = new Point(1-RollStat(1.0f, 0.5f), 1-RollStat(1.0f, 0.5f));
         }
 
         internal float GetDistance(Boid neighbor)
