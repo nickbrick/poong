@@ -105,12 +105,10 @@ namespace Poong.Blazor
             if (gameState.Players != null)
             {
                 Players = gameState.Players.Select(player => new Player(player) { IsTopTen = player.Score >= Game.MinTopTenScore }).ToList();
-                //leftPlayersLabel.Text = String.Join("\n", players.Where(player => player.Side == Side.Left).Select(player => $"{player.Name}({player.Score})"));
-                //rightPlayersLabel.Text = String.Join("\n", players.Where(player => player.Side == Side.Right).Select(player => $"{player.Name}({player.Score})"));
                 LogMessage($"Players: {Players.Count(player => player.Side == Side.Left)} left, {Players.Count(player => player.Side == Side.Right)} right. You are {Client.Player.Name} and your side is {Client.Player.Side}.");
                 LogMessage($"Left players: {String.Join(", ", gameState.Players.Where(player => player.Side == Side.Left).Select(p=>p.Name))}");
             }
-            PlayerPositions = gameState.PlayerPositions;//.Select(position => new Point((int)position.X, (int)position.Y)).ToList();
+            PlayerPositions = gameState.PlayerPositions;
             if (gameState.PlayerPositions != null)
             {
                 for (int i = 0; i < PlayerPositions.Count; i++)

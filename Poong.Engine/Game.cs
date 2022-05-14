@@ -142,7 +142,6 @@ namespace Poong.Engine
             NextFragment.RightPaddlePosition = rightPaddle.Corner.Y;
             NextFragment.RightPaddleSpeed = rightPaddle.Speed.Y;
             NextFragment.PlayerPositions = AlivePlayers.Select(player => player.Position).ToList();
-            //NextFragment.BallPositions = balls.Select(ball => ball.Corner).ToList();
         }
 
         private void ChangePhase(GamePhase phase, GamePhase[] nextPhases = null)
@@ -369,7 +368,6 @@ namespace Poong.Engine
         }
         private void KillTeamAndRedestribute(Side side)
         {
-            //AllPlayers.RemoveAll(player => player.Side == side);
             AllPlayers.ForEach(player => { if (player.Side == side) { player.Side = Side.None; player.Score += 1 << round - 1; } });
             AllPlayers = AllPlayers.OrderByDescending(player => player.Side).ToList(); // living players first
             AllPlayers.ForEach(player => { if (AllPlayers.IndexOf(player) < AlivePlayerCount / 2) player.Side = side; }); // half of the living players go the team that lost
@@ -437,6 +435,5 @@ namespace Poong.Engine
             var newMagnitude = MathF.MaxMagnitude(ball.Speed.X, 2.0f * ball.Speed.Y);
             ball.Speed.Y = MathF.CopySign(newMagnitude, distance);
         }
-
     }
 }

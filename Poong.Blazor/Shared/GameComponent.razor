@@ -31,12 +31,6 @@
               TargetTop="@ViewModel.Balls.First().TargetTop.GetValueOrDefault()"
               TargetTime="@ViewModel.Balls.First().TargetTime.GetValueOrDefault()">
         </Body>
-        @*@foreach (var player in ViewModel.Players)
-            {
-                <PlayerTag Player="player"
-                           TargetTime="@ViewModel.PlayerTweenTime">
-                </PlayerTag>
-            }*@
     </div>
     <canvas id="players-overlay" class="players-overlay">
     </canvas>
@@ -58,11 +52,7 @@
         try
         {
             ViewModel.Update(e.State);
-
-            //    if (e.Players != null)
-            //        players = e.Players.Select(player => new Point((int)player.Position.X, (int)player.Position.Y)).ToList();
             ViewModel.LastMousePosition = await GetBrowserLastMousePosition();
-            //ViewModel.Client.TryGiveInput(ViewModel.LastMousePosition.X, ViewModel.LastMousePosition.Y);
             await JSRuntime.InvokeVoidAsync("setPlayersKeyframe", ViewModel.Players);
             if (e.State.Players != null)
                 await JSRuntime.InvokeVoidAsync("printPlayers", ViewModel.Players);
@@ -70,9 +60,8 @@
 
             await InvokeAsync(StateHasChanged);
         }
-        catch (Exception ex)
+        catch
         {
-            //System.Diagnostics.Debug.WriteLine(ex);
         }
     }
     protected override void OnInitialized()
