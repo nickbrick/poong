@@ -66,6 +66,7 @@
             await JSRuntime.InvokeVoidAsync("setPlayersKeyframe", ViewModel.Players);
             if (e.State.Players != null)
                 await JSRuntime.InvokeVoidAsync("printPlayers", ViewModel.Players);
+            await JSRuntime.InvokeVoidAsync("setDocumentTitle", $"P{"oooooooooooooooo".Substring(0,ViewModel.Round)}ng");
 
             await InvokeAsync(StateHasChanged);
         }
@@ -103,7 +104,7 @@
     }
     private async Task InitPlayersOverlayCanvas()
     {
-        await JSRuntime.InvokeVoidAsync("initPlayersOverlayCanvas", Game.Config.TickMilliseconds );
+        await JSRuntime.InvokeVoidAsync("initPlayersOverlayCanvas", Game.Config.TickMilliseconds);
     }
 
     public async Task<PointF> GetBrowserLastMousePosition()
