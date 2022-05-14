@@ -54,8 +54,6 @@
             ViewModel.Update(e.State);
             ViewModel.LastMousePosition = await GetBrowserLastMousePosition();
             await JSRuntime.InvokeVoidAsync("setPlayersKeyframe", ViewModel.Players);
-            if (e.State.Players != null)
-                await JSRuntime.InvokeVoidAsync("printPlayers", ViewModel.Players);
             await JSRuntime.InvokeVoidAsync("setDocumentTitle", $"P{"oooooooooooooooo".Substring(0,ViewModel.Round)}ng");
 
             await InvokeAsync(StateHasChanged);

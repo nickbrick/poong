@@ -106,7 +106,6 @@ namespace Poong.Blazor
             {
                 Players = gameState.Players.Select(player => new Player(player) { IsTopTen = player.Score >= Game.MinTopTenScore }).ToList();
                 LogMessage($"Players: {Players.Count(player => player.Side == Side.Left)} left, {Players.Count(player => player.Side == Side.Right)} right. You are {Client.Player.Name} and your side is {Client.Player.Side}.");
-                LogMessage($"Left players: {String.Join(", ", gameState.Players.Where(player => player.Side == Side.Left).Select(p=>p.Name))}");
             }
             PlayerPositions = gameState.PlayerPositions;
             if (gameState.PlayerPositions != null)
