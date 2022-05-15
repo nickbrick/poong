@@ -233,7 +233,7 @@ namespace Poong.Engine
                 if (e.Collisions.HasFlag(Collisions.RightGoal)) Game_GoalScored(Side.Right);
 
             }
-            System.Diagnostics.Debug.WriteLine($"T {gameTime} {e.Collisions.ToString()} {(balls.First().Speed.Y > 0f ? "🔽" : "🔼")}");
+            System.Diagnostics.Debug.WriteLine($"T {gameTime} {e.Collisions} {(balls.First().Speed.Y > 0f ? "🔽" : "🔼")}");
             NextFragment.BallPositions = balls.Select(ball => ball.Corner).ToList();
             NextFragment.BallSpeeds = balls.Select(ball => ball.Speed).ToList();
         }

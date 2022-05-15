@@ -8,7 +8,4 @@
 @code {
     [Parameter] public Queue<string> Log { get; set; }
     private List<string> ReverseLog { get { List<string> l = Log.ToList(); l.Reverse(); return l; } }
-    protected override async Task OnParametersSetAsync()
-    {
-    }
 }
