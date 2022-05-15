@@ -27,12 +27,8 @@ namespace Poong.Blazor
         public GamePhase Phase;
 
         public Queue<string> Log = new Queue<string>(10);
-        private void LogMessage(object o, string caption = "")
-        {
-            Log.Enqueue(caption + (caption == "" ? "" : ": ") + o.ToString());
-            if (Log.Count > 10) Log.Dequeue();
-        }
-        private void LogMessage(string message)
+
+        internal void LogMessage(string message)
         {
             Log.Enqueue(message);
             if (Log.Count > 10) Log.Dequeue();
