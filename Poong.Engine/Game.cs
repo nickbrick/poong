@@ -81,6 +81,11 @@ namespace Poong.Engine
         {
             clock.Enabled = true;
         }
+        private void Pause()
+        {
+            clock.Enabled = false;
+        }
+
         private void BroadcastState()
         {
             if (ongoingBroadcasts > 0)
@@ -325,6 +330,9 @@ namespace Poong.Engine
         /// <returns>Generated client instance used to receive game state and pass input.</returns>
         public Client Join(float originX, float originY, float scaleX, float scaleY, string name = null)
         {
+            if (clients.Count == 0)
+                Start();
+
             var client = new Client
             {
                 Transformation = new Transformation(originX, originY, scaleX, scaleY),
@@ -346,6 +354,8 @@ namespace Poong.Engine
             ClientDisconnected?.Invoke(this, new PlayerEventArgs(client.Player));
             AllPlayers.Remove(client.Player);
             clients.Remove(client.Player.Id, out _);
+            if (clients.Count == 0)
+                Pause();
         }
         private Player JoinTeam(Side side = Side.None, string name = null)
         {
