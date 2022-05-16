@@ -10,7 +10,7 @@
   "PowerPaddleLengthThrehsold": 0,
   "PowerPaddleVerticalDeflectSpeed": 0.2,
   "MaxPlayersPerPaddle": 512,
-  "KickAfk": false,
+  "KickAfk": true,
   "UseBoids": true,
   "RenderAllNames": false,
   "BoidsPerPaddle": 100,
