@@ -55,7 +55,7 @@
             ViewModel.LastMousePosition = await GetBrowserLastMousePosition();
             await JSRuntime.InvokeVoidAsync("setPlayersKeyframe", ViewModel.Players);
             if (e.State.Round != null)
-                await JSRuntime.InvokeVoidAsync("setDocumentTitle", $"P{"oooooooooooooooo".Substring(0, ViewModel.Round)}ng");
+                await SetDocumentTitle();
 
             await InvokeAsync(StateHasChanged);
         }
@@ -71,7 +71,7 @@
     {
         ViewModel.LogMessage($"{e.Player.Name} disconnected.");
     }
-    protected override void OnInitialized()
+    protected async override void OnInitialized()
     {
         ViewModel.Game = Program.Game;
         ViewModel.Client = ViewModel.Game.Join(
@@ -81,7 +81,7 @@
         50.0f,
         Name);
         ViewModel.Update(ViewModel.Client.State);
-        JSRuntime.InvokeVoidAsync("setDocumentTitle", $"P{"oooooooooooooooo".Substring(0, ViewModel.Round)}ng");
+        await SetDocumentTitle();
         ViewModel.Client.StateChanged += Client_StateChanged;
         ViewModel.Game.PlayerJoined += Game_PlayerJoined;
         ViewModel.Game.ClientDisconnected += Game_ClientDisconnected;
@@ -95,7 +95,6 @@
             await InitPlayersOverlayCanvas();
         }
     }
-
     private async Task InitGameComponentInstance()
     {
         var dotNetObjRef = DotNetObjectReference.Create(this);
@@ -105,11 +104,14 @@
     {
         await JSRuntime.InvokeVoidAsync("initPlayersOverlayCanvas", Game.Config.TickMilliseconds);
     }
-
     public async Task<PointF> GetBrowserLastMousePosition()
     {
         var p = await JSRuntime.InvokeAsync<PointF>("getLastMousePosition");
         return p;
+    }
+    internal async Task SetDocumentTitle()
+    {
+        await JSRuntime.InvokeVoidAsync("setDocumentTitle", $"P{"oooooooooooooooo".Substring(0, ViewModel.Round)}ng");
     }
     void IDisposable.Dispose()
     {
