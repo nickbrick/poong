@@ -70,8 +70,8 @@ namespace Poong.Engine
                 rightFlock = new Flock();
                 for (int i = 0; i < Config.BoidsPerPaddle; i++)
                 {
-                    leftFlock.Boids.Add(new Boid(JoinTeam(Side.Left)));
-                    rightFlock.Boids.Add(new Boid(JoinTeam(Side.Right)));
+                    leftFlock.Boids.Add(new Boid(AddNewPlayerToGame(null, Side.Left)));
+                    rightFlock.Boids.Add(new Boid(AddNewPlayerToGame(null, Side.Right)));
                 }
             }
 
@@ -333,16 +333,15 @@ namespace Poong.Engine
             if (clients.Count == 0)
                 Start();
 
+            var newPlayer = AddNewPlayerToGame(name);
+
             var client = new Client
             {
                 Transformation = new Transformation(originX, originY, scaleX, scaleY),
-                Player = JoinTeam(Side.None, name)
+                Player = newPlayer
             };
-            if (phase != GamePhase.PreGame)
-            {
-                client.Player.Side = Side.None;
-            }
             client.State = GetFullStateFragment();
+            
             PlayerJoined?.Invoke(this, new PlayerEventArgs(client.Player));
             Debug.WriteLine($"players: {LeftPlayerCount} left, {RightPlayerCount} right, {AllPlayers.Count(player => player.Side == Side.None)} dead");
             clients.GetOrAdd(client.Player.Id, client); // Need to send full state to client before adding the client to game
@@ -357,24 +356,30 @@ namespace Poong.Engine
             if (clients.Count == 0)
                 Pause();
         }
-        private Player JoinTeam(Side side = Side.None, string name = null)
+        private Player AddNewPlayerToGame(string name, Side side = Side.None)
         {
             if (name == null) name = AnimalNames[new Random().Next(AnimalNames.Length)];
             var newPlayer = new Player(name);
             AllPlayers.Add(newPlayer);
+            if (phase == GamePhase.PreGame)
+                AddPlayerToTeam(newPlayer, side);
+            return newPlayer;
+        }
+        private Player AddPlayerToTeam(Player player, Side side = Side.None)
+        {
             if ((LeftPlayerCount < RightPlayerCount && side == Side.None) || side == Side.Left)
             {
-                newPlayer.Side = Side.Left;
-                newPlayer.Paddle = leftPaddle;
-                leftPaddle.Players.Add(newPlayer);
+                player.Side = Side.Left;
+                player.Paddle = leftPaddle;
+                leftPaddle.Players.Add(player);
             }
             else if (side != Side.Left)
             {
-                newPlayer.Side = Side.Right;
-                newPlayer.Paddle = rightPaddle;
-                rightPaddle.Players.Add(newPlayer);
+                player.Side = Side.Right;
+                player.Paddle = rightPaddle;
+                rightPaddle.Players.Add(player);
             }
-            return newPlayer;
+            return player;
         }
         private void KillTeamAndRedestribute(Side side)
         {
