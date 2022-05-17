@@ -81,6 +81,7 @@
         50.0f,
         Name);
         ViewModel.Update(ViewModel.Client.State);
+        JSRuntime.InvokeVoidAsync("setDocumentTitle", $"P{"oooooooooooooooo".Substring(0, ViewModel.Round)}ng");
         ViewModel.Client.StateChanged += Client_StateChanged;
         ViewModel.Game.PlayerJoined += Game_PlayerJoined;
         ViewModel.Game.ClientDisconnected += Game_ClientDisconnected;
