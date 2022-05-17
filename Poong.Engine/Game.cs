@@ -110,11 +110,11 @@ namespace Poong.Engine
 
             if (Config.UseBoids)
             {
-                leftFlock.X = leftPaddle.Center.X - (Config.PixelSize * 6);
+                leftFlock.X = leftPaddle.Center.X;
                 leftFlock.Y = (balls.First().Center.Y * 3 + leftPaddle.Center.Y) / 4;
                 leftFlock.Update();
 
-                rightFlock.X = rightPaddle.Center.X;// + (pixelSize * 2);
+                rightFlock.X = rightPaddle.Center.X;
                 rightFlock.Y = (balls.First().Center.Y * 3 + rightPaddle.Center.Y) / 4;
                 rightFlock.Update();
             }
