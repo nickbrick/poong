@@ -43,13 +43,13 @@ namespace Poong.Engine
 
             if (Left < -Game.Config.HorizontalHalfSize && Speed.X < 0)
                 boundaries |= Boundaries.LeftGoal;
-            else if (Left < -Game.Config.PaddleFaceDistance
-                && Right > -Game.Config.PaddleFaceDistance - Game.Config.PixelSize
-                && Speed.X < 0)
+            else if (Left < -Game.Config.HorizontalHalfSize + Game.Config.PaddleFaceDistance
+                 && Right > -Game.Config.HorizontalHalfSize + Game.Config.PaddleFaceDistance - Game.Config.PixelSize
+                 && Speed.X < 0)
                 boundaries |= Boundaries.LeftPaddle;
-            else if (Right > Game.Config.PaddleFaceDistance
-                && Left < Game.Config.PaddleFaceDistance + Game.Config.PixelSize
-                && Speed.X > 0)
+            else if (Right > Game.Config.HorizontalHalfSize - Game.Config.PaddleFaceDistance
+                   && Left < Game.Config.HorizontalHalfSize - Game.Config.PaddleFaceDistance + Game.Config.PixelSize
+                   && Speed.X > 0)
                 boundaries |= Boundaries.RightPaddle;
             else if (Right > Game.Config.HorizontalHalfSize && Speed.X > 0)
                 boundaries |= Boundaries.RightGoal;

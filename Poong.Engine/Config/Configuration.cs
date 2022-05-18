@@ -14,7 +14,7 @@ namespace Poong.Engine
         public float HorizontalHalfSize = 1.3f;
         public float PaddleInitialLength => PixelSize * 10.0f;
         public float PaddleDecay = 0.04f;
-        public float PowerPaddleLengthThrehsold = 0;
+        public float PowerPaddleLengthThreshold = 0;
         public float PowerPaddleVerticalDeflectSpeed = 0.2f;
         public int MaxPlayersPerPaddle = 512;
         public bool KickAfk = false;

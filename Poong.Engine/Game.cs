@@ -212,7 +212,7 @@ namespace Poong.Engine
             {
                 DeflectBallOffPaddleFace(ball, leftPaddle);
                 leftPaddle.Length -= Config.PaddleDecay;
-                if (leftPaddle.Length <= Config.PowerPaddleLengthThrehsold)
+                if (leftPaddle.Length <= Config.PowerPaddleLengthThreshold)
                     ball.Speed.Y = MathF.CopySign(Config.PowerPaddleVerticalDeflectSpeed, ball.Speed.Y);
                 NextFragment.LeftPaddleLength = leftPaddle.Length;
             }
@@ -220,7 +220,7 @@ namespace Poong.Engine
             {
                 DeflectBallOffPaddleFace(ball, rightPaddle);
                 rightPaddle.Length -= Config.PaddleDecay;
-                if (rightPaddle.Length <= Config.PowerPaddleLengthThrehsold)
+                if (rightPaddle.Length <= Config.PowerPaddleLengthThreshold)
                     ball.Speed.Y = MathF.CopySign(Config.PowerPaddleVerticalDeflectSpeed, ball.Speed.Y);
                 NextFragment.RightPaddleLength = rightPaddle.Length;
             }
