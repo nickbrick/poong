@@ -14,5 +14,5 @@
   "UseBoids": true,
   "RenderAllNames": false,
   "BoidsPerPaddle": 100,
-  "BallInitialSpeed": "0.04"
+  "BallInitialSpeed": 0.04
 }

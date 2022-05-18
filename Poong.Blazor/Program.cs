@@ -16,6 +16,7 @@ namespace Poong.Blazor
     public class Program
     {
         internal static Poong.Engine.Game Game;
+        internal static readonly int PixelsPerGameUnit = 200;
         public static void Main(string[] args)
         {
             string jsonConfig = File.ReadAllText("poongConfig.json");

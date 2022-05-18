@@ -2,8 +2,15 @@
 @inject IJSRuntime JsRuntime
 @using Poong.Blazor.Shared
 <Console Log="@ViewModel.Log"></Console>
+<style>
+    :root {
+        --pixels-per-game-unit: @(Program.PixelsPerGameUnit)px;
+        --game-width: @(Game.Config.HorizontalHalfSize * 2);
+        --game-height: @(Game.Config.VerticalHalfSize * 2);
+    }
+</style>
 <div class="main backdrop">
-    <div id="board" class="board" >
+    <div id="board" class="board">
         <Body Id="left-paddle"
               Height="@ViewModel.LeftPaddle.Height"
               Width="@ViewModel.LeftPaddle.Width"
@@ -32,7 +39,7 @@
               TargetTime="@ViewModel.Balls.First().TargetTime.GetValueOrDefault()">
         </Body>
     </div>
-    <div class="walls" style="min-width: @(Game.Config.HorizontalHalfSize*2*300)px; min-height: @(Game.Config.VerticalHalfSize*2*300)px;"></div>
+    <div class="walls"></div>
     <canvas id="players-overlay" class="players-overlay">
     </canvas>
 </div>

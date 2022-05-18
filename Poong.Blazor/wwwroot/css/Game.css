@@ -1,5 +1,8 @@
 ﻿:root {
-    --main-bg-color: brown;
+    /* These are set in GameComponent*/
+    --pixels-per-game-unit: unset;
+    --game-width: unset;
+    --game-height: unset;
 }
 .backdrop {
     background-color: black;
@@ -11,14 +14,16 @@
 }
 .board {
     display: flex;
-    min-width: 600px;
-    min-height: 600px;
+    min-width: calc(var(--pixels-per-game-unit)*2);
+    min-height: calc(var(--pixels-per-game-unit)*2);
     position: relative;
 }
 .walls {
     position: absolute;
     border-top: 1px solid white;
     border-bottom: 1px solid white;
+    min-width: calc(var(--pixels-per-game-unit)*var(--game-width));
+    min-height: calc(var(--pixels-per-game-unit)*var(--game-height));
 }
 .body {
     background-color: white;
