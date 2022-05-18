@@ -10,13 +10,15 @@
     overflow:hidden;
 }
 .board {
-    background-color: black;
     display: flex;
     min-width: 600px;
     min-height: 600px;
+    position: relative;
+}
+.walls {
+    position: absolute;
     border-top: 1px solid white;
     border-bottom: 1px solid white;
-    position: relative;
 }
 .body {
     background-color: white;

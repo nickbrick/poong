@@ -1,18 +1,18 @@
 {
-  "TickMilliseconds": 20.0,
-  "TicksPerUpdate": 5,
-  "PixelSize": 0.04,
-  "VerticalHalfSize": 1.0,
-  "PaddleFaceDistance": 0.89,
-  "HorizontalHalfSize": 1.3,
+  "TickMilliseconds": 30.0,
+  "TicksPerUpdate": 3,
+  "PixelSize": 0.08,
+  "VerticalHalfSize": 0.9,
+  "PaddleFaceDistance": 0.30,
+  "HorizontalHalfSize": 1.6,
   "PaddleInitialLength": 0.4,
-  "PaddleDecay": 0.04,
-  "PowerPaddleLengthThrehsold": 0,
+  "PaddleDecay": 0.06,
+  "PowerPaddleLengthThreshold": 0.0,
   "PowerPaddleVerticalDeflectSpeed": 0.2,
   "MaxPlayersPerPaddle": 512,
   "KickAfk": true,
   "UseBoids": true,
   "RenderAllNames": false,
   "BoidsPerPaddle": 100,
-  "BallInitialSpeed": "0.02"
+  "BallInitialSpeed": "0.04"
 }
