@@ -1,8 +1,8 @@
 ﻿updateClientSizes = function () {
     window.clientSizes =
     {
-        BoardWidth: document.getElementById("board").offsetWidth,
-        BoardHeight: document.getElementById("board").offsetHeight,
+        BoardWidth: document.getElementById('logic').offsetWidth,
+        BoardHeight: document.getElementById('logic').offsetHeight,
         ClientWidth: window.innerWidth,
         ClientHeight: window.innerHeight
     };
@@ -17,11 +17,7 @@ getLastMousePosition = function () {
     };
     return p;
 }
-registerGameComponentObject = function (dotNetObjRef) {
-    window.dotNetObjRef = dotNetObjRef;
-    updateClientSizes();
-    window.mousePosition = { x: 0, y: 0 };
-}
+
 document.addEventListener('readystatechange', function (evt) {
     switch (evt.target.readyState) {
         case "loading":

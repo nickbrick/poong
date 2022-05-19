@@ -7,10 +7,11 @@
         --pixels-per-game-unit: @(Program.PixelsPerGameUnit)px;
         --game-width: @(Game.Config.HorizontalHalfSize * 2);
         --game-height: @(Game.Config.VerticalHalfSize * 2);
+        --body-color: green;
     }
 </style>
 <div class="main backdrop">
-    <div id="board" class="board">
+    <div id="logic" class="logic">
         <Body Id="left-paddle"
               Height="@ViewModel.LeftPaddle.Height"
               Width="@ViewModel.LeftPaddle.Width"
@@ -39,9 +40,11 @@
               TargetTime="@ViewModel.Balls.First().TargetTime.GetValueOrDefault()">
         </Body>
     </div>
-    <div class="walls"></div>
-    <canvas id="players-overlay" class="players-overlay">
-    </canvas>
+    <div class="field">
+        <div class="wall glow top"></div>
+        <div class="wall glow bottom"></div>
+    </div>
+    <canvas id="players-overlay" class="players-overlay"></canvas>
 </div>
 @using Poong.Engine;
 @using System.Drawing;

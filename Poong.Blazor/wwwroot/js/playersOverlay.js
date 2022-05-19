@@ -1,5 +1,5 @@
 ﻿initPlayersOverlayCanvas = function (interval) {
-    c = document.getElementById("players-overlay");
+    c = document.getElementById('players-overlay');
     setContextStyles();
     window.addEventListener('resize', function (e) {
         setContextStyles();
@@ -10,9 +10,9 @@
     }, interval);
 }
 setContextStyles = function () {
-    window.ctx = c.getContext("2d");
-    window.ctx.strokeStyle = 'red';
-    window.ctx.fillStyle = 'red';
+    window.ctx = c.getContext('2d');
+    window.ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--body-color');
+    window.ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--body-color');
     window.ctx.font = '16px monospace';
 }
 
