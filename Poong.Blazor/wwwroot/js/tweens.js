@@ -4,7 +4,7 @@
         newStyleTag = document.createElement('style'); newStyleTag.id = `tweens-${id}`;
         document.body.appendChild(newStyleTag);
     }
-    document.getElementById(`tweens-${id}`).innerHTML = `@keyframes anim-${id} {from {left:${fromX}%; top:${fromY}%;} to {left:${toX}%; top:${toY}%;}} .tweens-${id}{animation: anim-${id} ${time}ms linear 0s;animation-fill-mode: forwards;}`
+    document.getElementById(`tweens-${id}`).innerHTML = `@keyframes anim-${id} {from {left:${fromX}%; top:${fromY}%;} to {left:${toX}%; top:${toY}%;}} .tweens-${id}{animation: anim-${id} ${time}ms linear 0s,trail 1000ms 1s ease-in-out infinite;animation-fill-mode: forwards;}`
     var bodyElm = document.getElementById(id);
     if (bodyElm) {
         bodyElm.classList.remove(`tweens-${id}`);
