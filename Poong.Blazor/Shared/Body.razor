@@ -1,7 +1,7 @@
 ﻿@inject IJSRuntime jsRuntime
 @using Poong.Blazor
-<div id="@Id" class="body glow"
-     style="@Style">
+<div id="@Id" class="body-logic" style="@Style">
+    <div class="body-visual glow flicker"></div>
 </div>
 @code {
     [Parameter] public string Id { get; set; }

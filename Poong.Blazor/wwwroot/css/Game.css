@@ -51,14 +51,34 @@
     background-size: 100% 6px, 3px 100%;
 }
 
-.body {
-    background-color: var(--body-color);
+.body-logic {
     position: absolute;
+}
+
+.body-visual {
+    background-color: var(--body-color);
+    height: 100%;
 }
 
 .glow {
     box-shadow: 0 0 14px 0px var(--body-color);
     border-radius: 2px;
+}
+
+.flicker {
+    animation: flicker 0.2s infinite cubic-bezier(0.445, 0.050, 0.550, 0.950);
+}
+
+@keyframes flicker {
+    0% {
+        filter: brightness(1);
+    }
+    50% {
+        filter: brightness(0.9);
+    }
+    100% {
+        filter: brightness(1);
+    }
 }
 
 .console {
