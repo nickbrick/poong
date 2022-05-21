@@ -7,7 +7,7 @@
         --pixels-per-game-unit: @(Program.PixelsPerGameUnit)px;
         --game-width: @(Game.Config.HorizontalHalfSize * 2);
         --game-height: @(Game.Config.VerticalHalfSize * 2);
-        --body-color: green;
+        --body-color: hsl(@Hue, 100%, 50%)
     }
 </style>
 <div class="main backdrop">
@@ -41,8 +41,8 @@
         </Body>
     </div>
     <div class="field">
-        <div class="wall glow top"></div>
-        <div class="wall glow bottom"></div>
+        <div class="wall glow flicker top"></div>
+        <div class="wall glow flicker bottom"></div>
     </div>
     <canvas id="players-overlay" class="players-overlay"></canvas>
 </div>
@@ -54,6 +54,7 @@
     [Inject]
     public IJSRuntime JSRuntime { get; set; }
     public ViewModel ViewModel = new ViewModel();
+    private int Hue = new Random().Next(300, 540);
     public GameComponent()
     {
 
@@ -78,6 +79,11 @@
     {
         ViewModel.LogMessage($"{e.Player.Name} joined.");
     }
+    public void Game_ClientBeingKicked(object sender, PlayerEventArgs e)
+    {
+        if (e.Player.Id == ViewModel.Client.Player.Id)
+            ViewModel.LogMessage($"You have been kicked for inactivity."); //TODO fix this, notify client first then kick them
+    }
     public void Game_ClientDisconnected(object sender, PlayerEventArgs e)
     {
         ViewModel.LogMessage($"{e.Player.Name} disconnected.");
@@ -96,6 +102,7 @@
         ViewModel.Client.StateChanged += Client_StateChanged;
         ViewModel.Game.PlayerJoined += Game_PlayerJoined;
         ViewModel.Game.ClientDisconnected += Game_ClientDisconnected;
+        ViewModel.Game.ClientBeingKicked += Game_ClientBeingKicked;
 
     }
     protected override async Task OnAfterRenderAsync(bool firstRender)

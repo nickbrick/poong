@@ -96,12 +96,13 @@ namespace Poong.Blazor
                 if (gameState.NewPhase == GamePhase.Endgame)
                     LogMessage($"Winner: {gameState.Players.Single(player => player.Side != Side.None).Name}");
                 Phase = gameState.NewPhase.Value;
-                LogMessage($"Round {Round}: {Phase}");
+                if (gameState.NewPhase == GamePhase.Ready)
+                    LogMessage($"Round {Round}: {gameState.Players.Count(player => player.Side != Side.None)} players remaining.");
             }
             if (gameState.Players != null)
             {
                 Players = gameState.Players.Select(player => new Player(player) { IsTopTen = player.Score >= Game.MinTopTenScore }).ToList();
-                LogMessage($"Players: {Players.Count(player => player.Side == Side.Left)} left, {Players.Count(player => player.Side == Side.Right)} right. You are {Client.Player.Name} and your side is {Client.Player.Side}.");
+                LogMessage($"You are {Client.Player.Name}." + (Client.Player.Side == Side.None ? $" You are dead! You will respawn at the start of the next game." : ""));
             }
             PlayerPositions = gameState.PlayerPositions;
             if (gameState.PlayerPositions != null)

@@ -15,6 +15,7 @@ namespace Poong.Engine
         public event EventHandler<BallEventArgs> BallCollided;
         public event EventHandler<PlayerEventArgs> PlayerJoined;
         public event EventHandler<PlayerEventArgs> ClientDisconnected;
+        public event EventHandler<PlayerEventArgs> ClientBeingKicked;
 
         public static Configuration Config { get; private set; }
 
@@ -29,6 +30,9 @@ namespace Poong.Engine
         private readonly List<Ball> balls;
         private readonly System.Collections.Concurrent.ConcurrentDictionary<Guid, Client> clients =
                      new System.Collections.Concurrent.ConcurrentDictionary<Guid, Client>();
+        private List<KeyValuePair<Guid,Client>> InactiveClients => clients.Where(kv =>
+                        kv.Value.Player.Side != Side.None
+                        && (kv.Value.Player.RoundStartPosition - kv.Value.Player.Position).Magnitude <= Single.Epsilon).ToList();
         private List<Player> AllPlayers { get; set; }
         private List<Player> LeftPlayers => AllPlayers.Where(player => player.Side == Side.Left).ToList();
         private List<Player> RightPlayers => AllPlayers.Where(player => player.Side == Side.Right).ToList();
@@ -315,7 +319,9 @@ namespace Poong.Engine
                         && (kv.Value.Player.RoundStartPosition - kv.Value.Player.Position).Magnitude <= Single.Epsilon)
                     .ToList();
                     if (Config.KickAfk)
-                        inactiveClients.ForEach(kv => Disconnect(kv.Value));
+                    {
+                        inactiveClients.ForEach(async kv => await Kick(kv.Value));
+                    }
                     break;
             }
         }
@@ -341,7 +347,7 @@ namespace Poong.Engine
                 Player = newPlayer
             };
             client.State = GetFullStateFragment();
-            
+
             PlayerJoined?.Invoke(this, new PlayerEventArgs(client.Player));
             Debug.WriteLine($"players: {LeftPlayerCount} left, {RightPlayerCount} right, {AllPlayers.Count(player => player.Side == Side.None)} dead");
             clients.GetOrAdd(client.Player.Id, client); // Need to send full state to client before adding the client to game
@@ -356,6 +362,13 @@ namespace Poong.Engine
             if (clients.Count == 0)
                 Pause();
         }
+        public async System.Threading.Tasks.Task Kick(Client client)
+        {
+            ClientBeingKicked?.Invoke(this, new PlayerEventArgs(client.Player));
+            await System.Threading.Tasks.Task.Delay(100);
+            Disconnect(client);
+        }
+
         private Player AddNewPlayerToGame(string name, Side side = Side.None)
         {
             if (name == null) name = AnimalNames[new Random().Next(AnimalNames.Length)];
