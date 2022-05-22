@@ -13,6 +13,6 @@
   "KickAfk": true,
   "UseBoids": true,
   "RenderAllNames": false,
-  "BoidsPerPaddle": 100,
+  "BoidsPerPaddle": 4,
   "BallInitialSpeed": 0.04
 }

@@ -6,10 +6,11 @@ namespace Poong.Engine
 {
     public class Player
     {
+        public Client Client { get; }
         public Guid Id { get; internal set; }
         public string Name { get; internal set; }
         public Point Position { get; internal set; }
-        public Point LastPosition{ get; internal set; }
+        public Point LastPosition { get; internal set; }
         public Point RoundStartPosition { get; internal set; }
         public Vector Speed => new Vector(Position.X - LastPosition.X, Position.Y - LastPosition.Y);
         public Side Side { get; internal set; }
@@ -23,13 +24,20 @@ namespace Poong.Engine
             LastPosition = new Point(0);
             RoundStartPosition = new Point(0);
         }
-    internal Player(string name) : this()
+        internal Player(string name) : this()
         {
             if (name != null)
                 Name = name;
         }
+        internal Player(string name, Client client) : this()
+        {
+            if (name != null)
+                Name = name;
+            Client = client;
+        }
         internal Player(Player player)
         {
+            Client = player.Client;
             Id = player.Id;
             Name = player.Name;
             Position = player.Position;

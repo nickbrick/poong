@@ -81,6 +81,15 @@
     }
 }
 
+.message {
+    text-shadow: 0 0 4px var(--body-color);
+    color: var(--body-color);
+    position: absolute;
+    top: -28px;
+    width: 100%;
+    text-align: center;
+    font: 16px monospace;
+}
 .console {
     list-style: none;
     background: linear-gradient(180deg, var(--body-color) 16%, rgba(0,0,0,1) 100%);

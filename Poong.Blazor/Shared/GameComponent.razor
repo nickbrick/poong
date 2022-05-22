@@ -41,6 +41,7 @@
         </Body>
     </div>
     <div class="field">
+        <div class="message flicker">@ViewModel.Message</div>
         <div class="wall glow flicker top"></div>
         <div class="wall glow flicker bottom"></div>
     </div>
@@ -75,14 +76,13 @@
         {
         }
     }
+    public void Client_NotificationReceived(object sender, string e)
+    {
+        ViewModel.Message = e;
+    }
     public void Game_PlayerJoined(object sender, PlayerEventArgs e)
     {
         ViewModel.LogMessage($"{e.Player.Name} joined.");
-    }
-    public void Game_ClientBeingKicked(object sender, PlayerEventArgs e)
-    {
-        if (e.Player.Id == ViewModel.Client.Player.Id)
-            ViewModel.LogMessage($"You have been kicked for inactivity."); //TODO fix this, notify client first then kick them
     }
     public void Game_ClientDisconnected(object sender, PlayerEventArgs e)
     {
@@ -100,9 +100,9 @@
         ViewModel.Update(ViewModel.Client.State);
         await SetDocumentTitle();
         ViewModel.Client.StateChanged += Client_StateChanged;
+        ViewModel.Client.NotificationReceived += Client_NotificationReceived;
         ViewModel.Game.PlayerJoined += Game_PlayerJoined;
         ViewModel.Game.ClientDisconnected += Game_ClientDisconnected;
-        ViewModel.Game.ClientBeingKicked += Game_ClientBeingKicked;
 
     }
     protected override async Task OnAfterRenderAsync(bool firstRender)

@@ -27,7 +27,7 @@ namespace Poong.Blazor
         public GamePhase Phase;
 
         public Queue<string> Log = new Queue<string>(10);
-
+        public string Message = "";
         internal void LogMessage(string message)
         {
             Log.Enqueue(message);
@@ -93,16 +93,16 @@ namespace Poong.Blazor
 
             if (gameState.NewPhase != null)
             {
-                if (gameState.NewPhase == GamePhase.Endgame)
-                    LogMessage($"Winner: {gameState.Players.Single(player => player.Side != Side.None).Name}");
-                Phase = gameState.NewPhase.Value;
-                if (gameState.NewPhase == GamePhase.Ready)
-                    LogMessage($"Round {Round}: {gameState.Players.Count(player => player.Side != Side.None)} players remaining.");
+                //if (gameState.NewPhase == GamePhase.Endgame)
+                //    Message = $"Winner: {gameState.Players.Single(player => player.Side != Side.None).Name}";
+                //Phase = gameState.NewPhase.Value;
+                //if (gameState.NewPhase == GamePhase.Ready)
+                //    Message = $"Round {Round}: {gameState.Players.Count(player => player.Side != Side.None)} players remaining.";
             }
             if (gameState.Players != null)
             {
                 Players = gameState.Players.Select(player => new Player(player) { IsTopTen = player.Score >= Game.MinTopTenScore }).ToList();
-                LogMessage($"You are {Client.Player.Name}." + (Client.Player.Side == Side.None ? $" You are dead! You will respawn at the start of the next game." : ""));
+                //Message = Client.Player.Side == Side.None ? $" You are dead! You will respawn at the start of the next game." : Message;
             }
             PlayerPositions = gameState.PlayerPositions;
             if (gameState.PlayerPositions != null)

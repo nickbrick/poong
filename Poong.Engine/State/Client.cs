@@ -8,6 +8,7 @@ namespace Poong.Engine
     public class Client
     {
         public event EventHandler<GameStateEventArgs> StateChanged;
+        public event EventHandler<string> NotificationReceived;
         public Transformation Transformation { get; set; }
         public Player Player { get; set; }
         private GameStateFragment _state;
@@ -20,6 +21,7 @@ namespace Poong.Engine
                 StateChanged?.Invoke(this, new GameStateEventArgs(State));
             }
         }
+
         private GameStateFragment ToScreen(GameStateFragment state)
         {
             if (state.LeftPaddle != null)
@@ -89,6 +91,9 @@ namespace Poong.Engine
             if (Player == null) return;
             Player.Position = Transformation.ToEngine(new Point(x, y));
         }
-
+        public void Notify(string message)
+        {
+            NotificationReceived?.Invoke(this, message);
+        }
     }
 }
