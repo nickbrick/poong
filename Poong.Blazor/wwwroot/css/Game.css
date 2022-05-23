@@ -89,6 +89,7 @@
     width: 100%;
     text-align: center;
     font: 16px monospace;
+    white-space: nowrap;
 }
 .console {
     list-style: none;
