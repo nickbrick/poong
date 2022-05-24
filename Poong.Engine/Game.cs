@@ -29,14 +29,15 @@ namespace Poong.Engine
         private readonly List<Ball> balls;
         private readonly System.Collections.Concurrent.ConcurrentDictionary<Guid, Client> clients =
                      new System.Collections.Concurrent.ConcurrentDictionary<Guid, Client>();
-        private List<KeyValuePair<Guid,Client>> InactiveClients => clients.Where(kv =>
-                        kv.Value.Player.Side != Side.None
-                        && (kv.Value.Player.RoundStartPosition - kv.Value.Player.Position).Magnitude <= Single.Epsilon).ToList();
+        private List<KeyValuePair<Guid, Client>> InactiveClients => clients.Where(kv =>
+                         kv.Value.Player.Side != Side.None
+                         && (kv.Value.Player.RoundStartPosition - kv.Value.Player.Position).Magnitude <= Single.Epsilon).ToList();
         private List<Player> AllPlayers { get; set; }
         private List<Player> LeftPlayers => AllPlayers.Where(player => player.Side == Side.Left).ToList();
         private List<Player> RightPlayers => AllPlayers.Where(player => player.Side == Side.Right).ToList();
         private List<Player> AlivePlayers => AllPlayers.Where(player => player.Side != Side.None).ToList();
-        private List<Player> DeadPlayers => AllPlayers.Where(player => player.Side == Side.None).ToList();
+        private List<Player> DyingPlayers => AllPlayers.Where(player => player.Side == Side.None && player.RoundDied == round).ToList();
+        private List<Player> DeadPlayers => AllPlayers.Where(player => player.Side == Side.None && player.RoundDied != round).ToList();
         private int PlayerCount => AllPlayers.Count;
         private int AlivePlayerCount => AllPlayers.Count(player => player.Side != Side.None);
         private int LeftPlayerCount => AllPlayers.Count(player => player.Side == Side.Left);
@@ -161,15 +162,11 @@ namespace Poong.Engine
             {
                 case GamePhase.PreGame:
                     phaseTime = (int)Cooldowns.Pregame;
-                    //NextFragment.Players = AlivePlayers;
                     break;
                 case GamePhase.Ready:
                     phaseTime = (int)Cooldowns.Goal;
-                    //AllPlayers.ForEach(player => player.Client?.Notify($"Round {round}: {AlivePlayerCount} players remain."));
                     break;
                 case GamePhase.Playing:
-                    //balls.ForEach(ball => ball.Launch(lastGoalSide));
-                    //NextFragment.BallSpeeds = balls.Select(ball => ball.Speed).ToList();
                     break;
                 case GamePhase.Endgame:
                     phaseTime = (int)Cooldowns.Endgame;
@@ -244,7 +241,7 @@ namespace Poong.Engine
                 if (e.Collisions.HasFlag(Collisions.RightGoal)) Game_GoalScored(Side.Right);
 
             }
-            System.Diagnostics.Debug.WriteLine($"T {gameTime} {e.Collisions} {(balls.First().Speed.Y > 0f ? "🔽" : "🔼")}");
+            //System.Diagnostics.Debug.WriteLine($"T {gameTime} {e.Collisions} {(balls.First().Speed.Y > 0f ? "🔽" : "🔼")}");
             NextFragment.BallPositions = balls.Select(ball => ball.Corner).ToList();
             NextFragment.BallSpeeds = balls.Select(ball => ball.Speed).ToList();
         }
@@ -255,30 +252,43 @@ namespace Poong.Engine
             leftPaddle.Length = Config.PaddleInitialLength;
             rightPaddle.Length = Config.PaddleInitialLength;
 
-            if (goalSide == Side.Left)
+            KillTeamAndRedestribute(goalSide);
+
+            var points = 1 << round - 1;
+            DyingPlayers.ForEach(player =>
             {
-                KillTeamAndRedestribute(Side.Left);
-            }
-            if (goalSide == Side.Right)
-            {
-                KillTeamAndRedestribute(Side.Right);
-            }
+                player.Score += points;
+                player.Client?.Notify($"You died! For making it to round {round}, you earn {points} point{(points > 1 ? "s" : "")}.");
+            });
+
             if (AlivePlayerCount >= 2)
             {
+                AlivePlayers.ForEach(player => player.Client?.Notify($"Your team scored! Get ready for the next round."));
+                DeadPlayers.ForEach(player => player.Client?.Notify($"{goalSide} team died! Survivors split up and move on to the next round."));
                 round += 1;
                 ChangePhase(GamePhase.Ready, new[] { GamePhase.Playing });
             }
             else if (AlivePlayerCount == 1)
             {
-                round += 1;
+                points = 1 << round;
+                var winner = AlivePlayers.Single();
+                winner.Score += points;
+                winner.Client?.Notify($"You won! For making it to round {round}, you earn {points} points.");
+                lastWinner = winner;
+
+                DeadPlayers.ForEach(player => player.Client?.Notify($"{winner.Name} wins the game!"));
+
+                //round += 1;
                 ChangePhase(GamePhase.Endgame, new[] { GamePhase.PreGame, GamePhase.Ready, GamePhase.Playing });
                 round = 1;
             }
             else
             {
-                ChangePhase(GamePhase.Endgame, new[] { GamePhase.PreGame, GamePhase.Playing });
+                ChangePhase(GamePhase.Endgame, new[] { GamePhase.PreGame, GamePhase.Ready, GamePhase.Playing });
                 round = 1;
             }
+
+
 
             NextFragment.Round = round;
             NextFragment.Players = AlivePlayers.ToList();
@@ -331,14 +341,16 @@ namespace Poong.Engine
             switch (e)
             {
                 case GamePhase.PreGame:
-                    AllPlayers.ForEach(player => player.Client?.Notify($"{(lastWinner != null ? $"Winner: {lastWinner.Name}. " : "")}New game starting soon."));
+                    AllPlayers.ForEach(player => player.Client?.Notify($"New game starting soon."));
                     NextFragment.Players = AlivePlayers;
                     break;
                 case GamePhase.Ready:
                     if (round == 1)
                         AlivePlayers.ForEach(player => player.Client?.Notify($"{player.Name}: Get ready for the first round."));
                     else
-                        AlivePlayers.ForEach(player => player.Client?.Notify($"Positions shuffled. Get ready for the next round."));
+                    {
+
+                    }
                     break;
                 case GamePhase.Playing:
                     balls.ForEach(ball => ball.Launch(lastGoalSide));
@@ -349,7 +361,6 @@ namespace Poong.Engine
                 case GamePhase.Endgame:
                     break;
             }
-            Debug.WriteLine(e + " starting");
         }
         /// <summary>
         /// Join game with client transformation parameters.
@@ -363,7 +374,7 @@ namespace Poong.Engine
         {
             if (clients.Count == 0)
                 Start();
-            
+
             var client = new Client
             {
                 Transformation = new Transformation(originX, originY, scaleX, scaleY),
@@ -414,7 +425,7 @@ namespace Poong.Engine
             AllPlayers.Add(player);
             if (phase == GamePhase.PreGame)
             {
-                player.Client?.Notify($"Welcome, {player.Name}. The game will start soon."); // TODO these didn't work
+                player.Client?.Notify($"Welcome, {player.Name}. The game will start soon.");
                 return AddPlayerToTeam(player, side);
             }
             player.Client?.Notify($"Welcome, {player.Name}. You will join as soon as this game ends.");
@@ -438,18 +449,11 @@ namespace Poong.Engine
         }
         private void KillTeamAndRedestribute(Side side)
         {
-            AllPlayers.ForEach(player => { if (player.Side == side) { player.Side = Side.None; var points = 1 << round - 1; player.Score += points; player.Client?.Notify($"You died! For making it to round {round}, you earn {points} point{(points>1?"s":"")}."); } });
+            AllPlayers.ForEach(player => { if (player.Side == side) { player.RoundDied = round; player.Side = Side.None; } });
             AllPlayers = AllPlayers.OrderByDescending(player => player.Side).ToList(); // living players first
             AllPlayers.ForEach(player => { if (AllPlayers.IndexOf(player) < AlivePlayerCount / 2) player.Side = side; }); // half of the living players go the team that lost
             NextFragment.MinTopTenScore = MinTopTenScore;
-            if (AlivePlayerCount == 1)
-            {
-                var points = 1 << round;
-                var winner = AlivePlayers.Single();
-                winner.Score += points;
-                winner.Client?.Notify($"You won! For making it to round {round}, you earn {points} points.");
-                lastWinner = winner;
-            }
+
             if (Config.UseBoids)
             {
                 if (side == Side.Left)

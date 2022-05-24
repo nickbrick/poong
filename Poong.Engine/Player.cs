@@ -15,6 +15,7 @@ namespace Poong.Engine
         public Vector Speed => new Vector(Position.X - LastPosition.X, Position.Y - LastPosition.Y);
         public Side Side { get; internal set; }
         public int Score { get; internal set; }
+        public int RoundDied { get; internal set; } = 0;
         internal Paddle Paddle { get; set; }
         internal Player()
         {
