@@ -359,7 +359,7 @@ namespace Poong.Engine
         /// <param name="scaleX">Number of pixels in one engine unit in the X direction.</param>
         /// <param name="scaleY">Number of pixels in one engine unit in the Y direction.</param>
         /// <returns>Generated client instance used to receive game state and pass input.</returns>
-        public Client Join(float originX, float originY, float scaleX, float scaleY, string name = null)
+        public Client Connect(float originX, float originY, float scaleX, float scaleY)
         {
             if (clients.Count == 0)
                 Start();
@@ -368,6 +368,11 @@ namespace Poong.Engine
             {
                 Transformation = new Transformation(originX, originY, scaleX, scaleY),
             };
+
+            return client;
+        }
+        public void Join(Client client, string name = null)
+        {
             if (name == null) name = AnimalNames[new Random().Next(AnimalNames.Length)];
             var newPlayer = new Player(name, client);
             client.Player = newPlayer;
@@ -379,7 +384,6 @@ namespace Poong.Engine
             PlayerJoined?.Invoke(this, new PlayerEventArgs(client.Player));
             Debug.WriteLine($"players: {LeftPlayerCount} left, {RightPlayerCount} right, {AllPlayers.Count(player => player.Side == Side.None)} dead");
             clients.GetOrAdd(client.Player.Id, client); // Need to send full state to client before adding the client to game
-            return client;
         }
         public void Disconnect(Client client)
         {

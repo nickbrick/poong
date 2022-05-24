@@ -93,7 +93,10 @@ namespace Poong.Engine
         }
         public void Notify(string message)
         {
+            System.Diagnostics.Debug.WriteLine("SEnding");
             NotificationReceived?.Invoke(this, message);
+            System.Diagnostics.Debug.WriteLine("sented");
+
         }
     }
 }

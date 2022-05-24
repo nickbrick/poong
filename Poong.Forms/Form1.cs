@@ -31,7 +31,7 @@ namespace Poong.Forms
             //GamePanel.Capture = true;
                 this.game = game == null ? new Poong.Engine.Game() : game;
             //Game.ClockTicked += Game_ClockTicked;
-            client = this.game.Join(
+            client = this.game.Connect(
                 GamePanel.Width / 2.0f,
                 GamePanel.Height / 2.0f,
                 GamePanel.Height / 2.0f,

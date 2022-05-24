@@ -91,19 +91,19 @@
     protected async override void OnInitialized()
     {
         ViewModel.Game = Program.Game;
-        ViewModel.Client = ViewModel.Game.Join(
+        ViewModel.Client = ViewModel.Game.Connect(
         50.0f,
         50.0f,
         50.0f,
-        50.0f,
-        Name);
-        ViewModel.Update(ViewModel.Client.State);
-        await SetDocumentTitle();
+        50.0f);
         ViewModel.Client.StateChanged += Client_StateChanged;
         ViewModel.Client.NotificationReceived += Client_NotificationReceived;
         ViewModel.Game.PlayerJoined += Game_PlayerJoined;
         ViewModel.Game.ClientDisconnected += Game_ClientDisconnected;
-
+        
+        ViewModel.Game.Join(ViewModel.Client, Name);
+        ViewModel.Update(ViewModel.Client.State);
+        await SetDocumentTitle();
     }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
