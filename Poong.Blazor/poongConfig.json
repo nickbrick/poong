@@ -1,6 +1,6 @@
 {
-  "TickMilliseconds": 30.0,
-  "TicksPerUpdate": 3,
+  "TickMilliseconds": 20.0,
+  "TicksPerUpdate": 5,
   "PixelSize": 0.08,
   "VerticalHalfSize": 0.9,
   "PaddleFaceDistance": 0.30,
@@ -12,6 +12,7 @@
   "MaxPlayersPerPaddle": 512,
   "KickAfk": true,
   "UseBoids": true,
+  "ShowPlayerSide" : true,
   "RenderAllNames": false,
   "BoidsPerPaddle": 4,
   "BallInitialSpeed": 1.33

@@ -19,6 +19,7 @@ namespace Poong.Engine
         public int MaxPlayersPerPaddle = 512;
         public bool KickAfk = false;
         public bool UseBoids = true;
+        public bool ShowPlayerSide = false;
         public bool RenderAllNames = false;
         public int BoidsPerPaddle = 4;
 
