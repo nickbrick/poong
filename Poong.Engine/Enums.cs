@@ -46,10 +46,10 @@ namespace Poong.Engine
         Ready = 2,
         Endgame = 3
     }
-    public enum Cooldowns
+    public static class Cooldowns
     {
-        Goal = 120,
-        Pregame = 240,
-        Endgame = 240
+        public static float Goal = 4.0f;
+        public static float Pregame = 8.0f;
+        public static float Endgame = 8.0f;
     }
 }

@@ -42,6 +42,22 @@ namespace Poong.Engine
         {
             return value * (axis == Axis.X ? ScaleX : ScaleY) + (mode == Mode.Position ?(axis == Axis.X ? OriginX : OriginY) : 0);
         }
+        internal static float ToRatePerSecond(float ratePerTick)
+        {
+            return ratePerTick / Game.Config.TickMilliseconds * 1000f;
+        }
+        internal static float ToRatePerTick(float ratePerSecond)
+        {
+            return ratePerSecond * Game.Config.TickMilliseconds / 1000f;
+        }
+        internal static float ToSeconds(int ticks)
+        {
+            return ticks * Game.Config.TickMilliseconds / 1000f;
+        }
+        internal static int ToTicks(float seconds)
+        {
+            return (int)MathF.Round(seconds * 1000f / (float)Game.Config.TickMilliseconds);
+        }
         internal enum Axis
         {
             X,

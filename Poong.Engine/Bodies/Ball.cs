@@ -29,7 +29,7 @@ namespace Poong.Engine
         internal void Launch(Side side)
         {
             int sign = side == Side.None ? new Random().Next(2) * 2 - 1 : side == Side.Right?1:-1;
-            Speed.X = Game.Config.BallInitialSpeed * sign;
+            Speed.X = Transformation.ToRatePerTick(Game.Config.BallInitialSpeed) * sign;
             Speed.Y = 0;
         }
     private Boundaries GetBoundariesTouching()

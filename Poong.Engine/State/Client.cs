@@ -80,12 +80,6 @@ namespace Poong.Engine
             return state;
         }
 
-        //internal void SetPhase(GamePhase phase)
-        //{
-        //    var eventArgs = new GamePhaseChangedEventArgs { NewPhase = phase, OldPhase = _state.Phase, Round = _state.Round };
-        //    _state.Phase = phase;
-        //    PhaseChanged?.Invoke(this, eventArgs);
-        //}
         public void TryGiveInput(float x, float y)
         {
             if (Player == null) return;

@@ -48,7 +48,7 @@ namespace Poong.Engine
         private int round = 1;
         private GameStateFragment NextFragment;
         private long gameTime = 0;
-        private int phaseTime = (int)Cooldowns.Pregame;
+        private int phaseTime = 0;
         private Side lastGoalSide = Side.None;
         private Player lastWinner;
         private int ongoingBroadcasts = 0;
@@ -67,6 +67,7 @@ namespace Poong.Engine
             AllPlayers = new List<Player>(2 * Game.Config.MaxPlayersPerPaddle);
 
             clock = new Timer(Config.TickMilliseconds);
+            phaseTime = Transformation.ToTicks(Cooldowns.Pregame);
             clock.Elapsed += Tick;
             BallCollided += Game_BallCollided;
 
@@ -161,15 +162,15 @@ namespace Poong.Engine
             switch (phase)
             {
                 case GamePhase.PreGame:
-                    phaseTime = (int)Cooldowns.Pregame;
+                    phaseTime = Transformation.ToTicks(Cooldowns.Pregame);
                     break;
                 case GamePhase.Ready:
-                    phaseTime = (int)Cooldowns.Goal;
+                    phaseTime = Transformation.ToTicks(Cooldowns.Goal);
                     break;
                 case GamePhase.Playing:
                     break;
                 case GamePhase.Endgame:
-                    phaseTime = (int)Cooldowns.Endgame;
+                    phaseTime = Transformation.ToTicks(Cooldowns.Endgame);
                     break;
             }
             this.phase = phase;
