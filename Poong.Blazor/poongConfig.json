@@ -1,6 +1,6 @@
 {
-  "TickMilliseconds": 20.0,
-  "TicksPerUpdate": 5,
+  "TickMilliseconds": 30.0,
+  "TicksPerUpdate": 1,
   "PixelSize": 0.08,
   "VerticalHalfSize": 0.9,
   "PaddleFaceDistance": 0.30,
