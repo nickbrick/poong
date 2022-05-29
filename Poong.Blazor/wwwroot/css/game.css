@@ -81,16 +81,25 @@
     }
 }
 
-.message {
+.text {
     text-shadow: 0 0 4px var(--body-color);
     color: var(--body-color);
     position: absolute;
-    top: -28px;
     width: 100%;
-    text-align: center;
     font: 16px monospace;
+    text-align: center;
     white-space: nowrap;
 }
+.message {
+    top: -28px;
+}
+.toolbar {
+    bottom: -28px;
+}
+    .toolbar a:not([href]):not([tabindex]) {
+        text-decoration: underline;
+    }
+
 .console {
     list-style: none;
     background: linear-gradient(180deg, var(--body-color) 16%, rgba(0,0,0,1) 100%);

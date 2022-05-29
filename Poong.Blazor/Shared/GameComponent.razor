@@ -41,9 +41,14 @@
         </Body>
     </div>
     <div class="field">
-        <div class="message flicker">@ViewModel.Message</div>
+        <div class="text message flicker">@ViewModel.Message</div>
         <div class="wall glow flicker top"></div>
         <div class="wall glow flicker bottom"></div>
+        <div class="text toolbar flicker">
+            <span>[@(ViewModel.Client.Player.Side)] @(ViewModel.Client.Player.Name) (@(ViewModel.Client.Player.Score))</span>
+            <a>Help</a>
+            <a>GitHub</a>
+        </div>
     </div>
     <canvas id="players-overlay" class="players-overlay"></canvas>
 </div>

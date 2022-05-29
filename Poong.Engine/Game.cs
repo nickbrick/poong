@@ -393,7 +393,7 @@ namespace Poong.Engine
             Debug.WriteLine($"players: {LeftPlayerCount} left, {RightPlayerCount} right, {AllPlayers.Count(player => player.Side == Side.None)} dead");
             clients.GetOrAdd(client.Player.Id, client); // Need to send full state to client before adding the client to game
         }
-        public void Disconnect(Client client)
+        public void Disconnect(Client client) // TODO look into player scramble bug on disconnect
         {
             Debug.WriteLine("Disconnecting client");
             ClientDisconnected?.Invoke(this, new PlayerEventArgs(client.Player));
