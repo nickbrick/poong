@@ -264,8 +264,8 @@ namespace Poong.Engine
 
             if (AlivePlayerCount >= 2)
             {
-                AlivePlayers.ForEach(player => player.Client?.Notify($"Your team scored! Get ready for the next round." + (Config.ShowPlayerSide ? $" You are {player.Side}." : "")));
-                DeadPlayers.ForEach(player => player.Client?.Notify($"{goalSide} team died! Survivors split up and move on to the next round."));
+                AlivePlayers.ForEach(player => player.Client?.Notify($"Your side scored! Get ready for the next round." + (Config.ShowPlayerSide ? $" You are {player.Side}." : "")));
+                DeadPlayers.ForEach(player => player.Client?.Notify($"{goalSide} side died! Survivors split up and move on to the next round."));
                 round += 1;
                 ChangePhase(GamePhase.Ready, new[] { GamePhase.Playing });
             }
