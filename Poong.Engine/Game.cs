@@ -343,6 +343,7 @@ namespace Poong.Engine
             {
                 case GamePhase.PreGame:
                     AllPlayers.ForEach(player => player.Client?.Notify($"New game starting soon."));
+                    UpdateRanking();
                     NextFragment.Players = AlivePlayers;
                     break;
                 case GamePhase.Ready:
@@ -471,7 +472,10 @@ namespace Poong.Engine
             leftPaddle.Players = LeftPlayers;
             rightPaddle.Players = RightPlayers;
         }
-
+        private void UpdateRanking()
+        {
+            AllPlayers.ForEach(player => player.Rank = AllPlayers.Count(player_ => player_.Score > player.Score) + 1);
+        }
         private void Ball_BoundaryTouching(object sender, Ball.BoundaryTouchingEventArgs e)
         {
             Ball ball = (Ball)sender;

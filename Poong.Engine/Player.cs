@@ -16,6 +16,7 @@ namespace Poong.Engine
         public Side Side { get; internal set; }
         public int Score { get; internal set; }
         public int RoundDied { get; internal set; } = 0;
+        public int Rank { get; internal set; } = 0;
         internal Paddle Paddle { get; set; }
         internal Player()
         {
