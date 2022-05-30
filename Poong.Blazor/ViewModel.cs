@@ -93,6 +93,20 @@ namespace Poong.Blazor
 
             if (gameState.NewPhase != null)
             {
+                if (gameState.NewPhase == GamePhase.Ready)
+                {
+                    var side = Client.Player.Side;
+                    if (side == Side.Left)
+                        LeftPaddle.IsBlinking = true;
+                    else if (side == Side.Right)
+                        RightPaddle.IsBlinking = true;
+                }
+                else
+                {
+                    LeftPaddle.IsBlinking = false;
+                    RightPaddle.IsBlinking = false;
+                }
+
                 //if (gameState.NewPhase == GamePhase.Endgame)
                 //    Message = $"Winner: {gameState.Players.Single(player => player.Side != Side.None).Name}";
                 //Phase = gameState.NewPhase.Value;
@@ -146,6 +160,7 @@ namespace Poong.Blazor
             public float? TargetLeft { get; set; }
             public float? TargetTop { get; set; }
             public float? TargetTime { get; set; }
+            public bool IsBlinking { get; set; } = false;
             public void CalculateTarget(float projectionTime)
             {
                 TargetTime = projectionTime;

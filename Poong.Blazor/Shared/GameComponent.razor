@@ -19,7 +19,8 @@
               Top="@ViewModel.LeftPaddle.Top"
               TargetLeft="@ViewModel.LeftPaddle.TargetLeft.GetValueOrDefault()"
               TargetTop="@ViewModel.LeftPaddle.TargetTop.GetValueOrDefault()"
-              TargetTime="@ViewModel.LeftPaddle.TargetTime.GetValueOrDefault()">
+              TargetTime="@ViewModel.LeftPaddle.TargetTime.GetValueOrDefault()"
+              IsBlinking="@ViewModel.LeftPaddle.IsBlinking">
         </Body>
         <Body Id="right-paddle"
               Height="@ViewModel.RightPaddle.Height"
@@ -28,7 +29,8 @@
               Top="@ViewModel.RightPaddle.Top"
               TargetLeft="@ViewModel.RightPaddle.TargetLeft.GetValueOrDefault()"
               TargetTop="@ViewModel.RightPaddle.TargetTop.GetValueOrDefault()"
-              TargetTime="@ViewModel.RightPaddle.TargetTime.GetValueOrDefault()">
+              TargetTime="@ViewModel.RightPaddle.TargetTime.GetValueOrDefault()"
+              IsBlinking="@ViewModel.RightPaddle.IsBlinking">
         </Body>
         <Body Id="ball-0"
               Height="@ViewModel.Balls.First().Height"
@@ -37,7 +39,8 @@
               Top="@ViewModel.Balls.First().Top"
               TargetLeft="@ViewModel.Balls.First().TargetLeft.GetValueOrDefault()"
               TargetTop="@ViewModel.Balls.First().TargetTop.GetValueOrDefault()"
-              TargetTime="@ViewModel.Balls.First().TargetTime.GetValueOrDefault()">
+              TargetTime="@ViewModel.Balls.First().TargetTime.GetValueOrDefault()"
+              IsBlinking="@ViewModel.Balls.First().IsBlinking">
         </Body>
     </div>
     <div class="field">
@@ -105,7 +108,7 @@
         ViewModel.Client.NotificationReceived += Client_NotificationReceived;
         ViewModel.Game.PlayerJoined += Game_PlayerJoined;
         ViewModel.Game.ClientDisconnected += Game_ClientDisconnected;
-        
+
         ViewModel.Game.Join(ViewModel.Client, Name);
         ViewModel.Update(ViewModel.Client.State);
         await SetDocumentTitle();

@@ -1,7 +1,7 @@
 ﻿@inject IJSRuntime jsRuntime
 @using Poong.Blazor
 <div id="@Id" class="body-logic" style="@Style">
-    <div class="body-visual glow flicker"></div>
+    <div class="body-visual glow flicker @(IsBlinking ? "blink":"")"></div>
 </div>
 @code {
     [Parameter] public string Id { get; set; }
@@ -12,6 +12,7 @@
     [Parameter] public float? TargetLeft { get; set; }
     [Parameter] public float? TargetTop { get; set; }
     [Parameter] public float? TargetTime { get; set; }
+    [Parameter] public bool IsBlinking { get; set; }
 
     public Body() { }
     public string Style => $"height:{Height}%;width:{Width}%;left:{Left}%;top:{Top}%;";
@@ -23,5 +24,4 @@
             await jsRuntime.InvokeVoidAsync("startTweenAnimation", new object[] { Id, Left, Top, TargetLeft, TargetTop, TargetTime });
         }
     }
-
 }

@@ -73,11 +73,27 @@
     0% {
         filter: brightness(1);
     }
+
     50% {
         filter: brightness(0.9);
     }
+
     100% {
         filter: brightness(1);
+    }
+}
+
+.flicker.blink {
+    animation: flicker 0.2s infinite cubic-bezier(0.445, 0.050, 0.550, 0.950), blink 0.25s steps(1, end) 1s 8 both;
+}
+
+@keyframes blink {
+    50% {
+        visibility: hidden;
+    }
+
+    0%, 100% {
+        visibility: visible;
     }
 }
 
@@ -90,12 +106,15 @@
     text-align: center;
     white-space: nowrap;
 }
+
 .message {
     top: -28px;
 }
+
 .toolbar {
     bottom: -28px;
 }
+
     .toolbar a:not([href]):not([tabindex]) {
         text-decoration: underline;
     }
