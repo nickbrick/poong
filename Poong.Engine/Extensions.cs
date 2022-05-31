@@ -12,6 +12,7 @@ namespace Poong.Engine
         }
         public static string ToOrdinalString(this int ordinal)
         {
+            if (ordinal <= 0) return "No rank";
             var suffix = "th";
             string number = ordinal.ToString();
             if (number.EndsWith("1") && !number.EndsWith("11")) suffix = "st";
