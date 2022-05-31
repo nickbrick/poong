@@ -11,7 +11,7 @@
         --background-color: hsl(@Hue, 60%, 3%);
     }
 </style>
-<div class="main backdrop" onclick="rollColor()">
+<div class="main backdrop" onclick="rollColor()" oncontextmenu="clearBackground();return false;">
     <div id="logic" class="logic">
         <Body Id="left-paddle"
               Height="@ViewModel.LeftPaddle.Height"
@@ -55,7 +55,7 @@
             <a>GitHub</a>
         </div>
     </div>
-    <canvas id="players-overlay" class="players-overlay"></canvas>
+    <canvas id="players-overlay" class="players-overlay" oncontextmenu="return false;"></canvas>
 </div>
 @using Poong.Engine;
 @using System.Drawing;
