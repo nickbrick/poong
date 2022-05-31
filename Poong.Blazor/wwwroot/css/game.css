@@ -113,10 +113,12 @@
 
 .toolbar {
     bottom: -28px;
+    display:flex;
 }
 
     .toolbar a:not([href]):not([tabindex]) {
         text-decoration: underline;
+        padding: 0 4px;
     }
 
 .console {
