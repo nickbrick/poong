@@ -1,4 +1,4 @@
-﻿initPlayersOverlayCanvas = function (interval) {
+﻿function initPlayersOverlayCanvas(interval) {
     c = document.getElementById('players-overlay');
     setContextStyles();
     window.addEventListener('resize', function (e) {
@@ -9,7 +9,7 @@
         stepPlayerPositions();
     }, interval);
 }
-setContextStyles = function () {
+function setContextStyles() {
     window.ctx = c.getContext('2d');
     window.ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--body-color');
     window.ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--body-color');

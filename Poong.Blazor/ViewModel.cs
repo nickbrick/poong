@@ -6,8 +6,6 @@ using Poong.Engine;
 using System.Drawing;
 using Point = Poong.Engine.Point;
 using Size = Poong.Engine.Size;
-using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 
 namespace Poong.Blazor
 {
@@ -106,17 +104,10 @@ namespace Poong.Blazor
                     LeftPaddle.IsBlinking = false;
                     RightPaddle.IsBlinking = false;
                 }
-
-                //if (gameState.NewPhase == GamePhase.Endgame)
-                //    Message = $"Winner: {gameState.Players.Single(player => player.Side != Side.None).Name}";
-                //Phase = gameState.NewPhase.Value;
-                //if (gameState.NewPhase == GamePhase.Ready)
-                //    Message = $"Round {Round}: {gameState.Players.Count(player => player.Side != Side.None)} players remaining.";
             }
             if (gameState.Players != null)
             {
                 Players = gameState.Players.Select(player => new Player(player) { IsTopTen = player.Score >= Game.MinTopTenScore }).ToList();
-                //Message = Client.Player.Side == Side.None ? $" You are dead! You will respawn at the start of the next game." : Message;
             }
             PlayerPositions = gameState.PlayerPositions;
             if (gameState.PlayerPositions != null)

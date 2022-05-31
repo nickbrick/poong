@@ -1,4 +1,4 @@
-﻿updateClientSizes = function () {
+﻿function updateClientSizes() {
     window.clientSizes =
     {
         BoardWidth: document.getElementById('logic').offsetWidth,
@@ -10,7 +10,7 @@
     document.getElementById("players-overlay").height = window.clientSizes.ClientHeight;
 
 }
-getLastMousePosition = function () {
+function getLastMousePosition() {
     p = {
         X: (window.mousePosition.x - (window.clientSizes.ClientWidth - window.clientSizes.BoardWidth) / 2) / window.clientSizes.BoardWidth * 100,
         Y: (window.mousePosition.y - (window.clientSizes.ClientHeight - window.clientSizes.BoardHeight) / 2) / window.clientSizes.BoardHeight * 100

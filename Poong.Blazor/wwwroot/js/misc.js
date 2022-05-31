@@ -1,4 +1,4 @@
-﻿registerGameComponentObject = function (dotNetObjRef) {
+﻿function registerGameComponentObject(dotNetObjRef) {
     window.dotNetObjRef = dotNetObjRef;
     updateClientSizes();
     window.mousePosition = { x: 0, y: 0 };

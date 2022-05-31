@@ -279,7 +279,6 @@ namespace Poong.Engine
 
                 DeadPlayers.ForEach(player => player.Client?.Notify($"{winner.Name} wins the game!"));
 
-                //round += 1;
                 ChangePhase(GamePhase.Endgame, new[] { GamePhase.PreGame, GamePhase.Ready, GamePhase.Playing });
                 round = 1;
             }
@@ -405,7 +404,6 @@ namespace Poong.Engine
         }
         public async System.Threading.Tasks.Task KickInactiveClient(Client client)
         {
-            //ClientBeingKicked?.Invoke(this, new PlayerEventArgs(client.Player));
             client.Notify("You have been kicked for inactivity.");
             await System.Threading.Tasks.Task.Delay(100);
             Disconnect(client);
