@@ -3,11 +3,12 @@
     --pixels-per-game-unit: unset;
     --game-width: unset;
     --game-height: unset;
-    --body-color: red;
+    --body-color: unset;
+    --background-color: unset;
 }
 
 .backdrop {
-    background-color: black;
+    background-color: var(--background-color);
     height: 100vh;
     display: flex;
     align-items: center;
