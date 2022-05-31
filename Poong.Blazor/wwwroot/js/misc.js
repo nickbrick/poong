@@ -7,3 +7,8 @@
 function setDocumentTitle(title) {
     document.title = title;
 }
+
+function rollColor() {
+    document.documentElement.style.setProperty('--body-color', `hsl(${Math.floor(Math.random() * (540 - 300 + 1) + 300)},100%,50%`);
+    setContextStyles();
+}
