@@ -408,7 +408,6 @@ namespace Poong.Engine
             await System.Threading.Tasks.Task.Delay(100);
             Disconnect(client);
         }
-        // TODO these are a fucking mess sort them out
         private Player AddNewPlayerToGame(string name, Side side = Side.None)
         {
             if (name == null) name = AnimalNames[new Random().Next(AnimalNames.Length)];
