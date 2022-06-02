@@ -34,10 +34,11 @@ namespace Poong.Forms
             this.Ball = new System.Windows.Forms.PictureBox();
             this.RightPaddle = new System.Windows.Forms.PictureBox();
             this.LeftPaddle = new System.Windows.Forms.PictureBox();
-            this.messagesLabel = new System.Windows.Forms.Label();
+            this.phaseLabel = new System.Windows.Forms.Label();
             this.TweenTimer = new System.Windows.Forms.Timer(this.components);
             this.leftPlayersLabel = new System.Windows.Forms.Label();
             this.rightPlayersLabel = new System.Windows.Forms.Label();
+            this.messagesLabel = new System.Windows.Forms.Label();
             this.GamePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Ball)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.RightPaddle)).BeginInit();
@@ -53,7 +54,7 @@ namespace Poong.Forms
             this.GamePanel.Controls.Add(this.LeftPaddle);
             this.GamePanel.Location = new System.Drawing.Point(299, 142);
             this.GamePanel.Margin = new System.Windows.Forms.Padding(0);
-            this.GamePanel.MaximumSize = new System.Drawing.Size(700, 500);
+            this.GamePanel.MaximumSize = new System.Drawing.Size(7000, 5000);
             this.GamePanel.Name = "GamePanel";
             this.GamePanel.Size = new System.Drawing.Size(700, 500);
             this.GamePanel.TabIndex = 0;
@@ -87,18 +88,18 @@ namespace Poong.Forms
             this.LeftPaddle.TabIndex = 0;
             this.LeftPaddle.TabStop = false;
             // 
-            // messagesLabel
+            // phaseLabel
             // 
-            this.messagesLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.messagesLabel.Font = new System.Drawing.Font("OCR A Extended", 39F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.messagesLabel.ForeColor = System.Drawing.Color.Snow;
-            this.messagesLabel.Location = new System.Drawing.Point(251, 43);
-            this.messagesLabel.MinimumSize = new System.Drawing.Size(200, 0);
-            this.messagesLabel.Name = "messagesLabel";
-            this.messagesLabel.Size = new System.Drawing.Size(800, 67);
-            this.messagesLabel.TabIndex = 1;
-            this.messagesLabel.Text = "messages";
-            this.messagesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.phaseLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.phaseLabel.Font = new System.Drawing.Font("OCR A Extended", 28.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.phaseLabel.ForeColor = System.Drawing.Color.Snow;
+            this.phaseLabel.Location = new System.Drawing.Point(251, 0);
+            this.phaseLabel.MinimumSize = new System.Drawing.Size(200, 0);
+            this.phaseLabel.Name = "phaseLabel";
+            this.phaseLabel.Size = new System.Drawing.Size(800, 67);
+            this.phaseLabel.TabIndex = 1;
+            this.phaseLabel.Text = "phase";
+            this.phaseLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // leftPlayersLabel
             // 
@@ -125,15 +126,29 @@ namespace Poong.Forms
             this.rightPlayersLabel.Text = "right players";
             this.rightPlayersLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
+            // messagesLabel
+            // 
+            this.messagesLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.messagesLabel.Font = new System.Drawing.Font("OCR A Extended", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.messagesLabel.ForeColor = System.Drawing.Color.Snow;
+            this.messagesLabel.Location = new System.Drawing.Point(251, 67);
+            this.messagesLabel.MinimumSize = new System.Drawing.Size(200, 0);
+            this.messagesLabel.Name = "messagesLabel";
+            this.messagesLabel.Size = new System.Drawing.Size(800, 67);
+            this.messagesLabel.TabIndex = 4;
+            this.messagesLabel.Text = "message";
+            this.messagesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlText;
             this.ClientSize = new System.Drawing.Size(1299, 794);
+            this.Controls.Add(this.messagesLabel);
             this.Controls.Add(this.rightPlayersLabel);
             this.Controls.Add(this.leftPlayersLabel);
-            this.Controls.Add(this.messagesLabel);
+            this.Controls.Add(this.phaseLabel);
             this.Controls.Add(this.GamePanel);
             this.DoubleBuffered = true;
             this.Name = "Form1";
@@ -153,10 +168,11 @@ namespace Poong.Forms
         private System.Windows.Forms.PictureBox Ball;
         private System.Windows.Forms.PictureBox RightPaddle;
         private System.Windows.Forms.PictureBox LeftPaddle;
-        private System.Windows.Forms.Label messagesLabel;
+        private System.Windows.Forms.Label phaseLabel;
         private System.Windows.Forms.Timer TweenTimer;
         private System.Windows.Forms.Label leftPlayersLabel;
         private System.Windows.Forms.Label rightPlayersLabel;
+        private System.Windows.Forms.Label messagesLabel;
     }
 }
 

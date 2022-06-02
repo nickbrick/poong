@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,8 @@ namespace Poong.Forms
 {
     public partial class Form1 : Form
     {
+        private const int pixelsPerGameUnit = 200;
+        private Configuration poongConfig;
         private Game game;
         private Point lastMousePosition = new Point(0, 0);
         private List<Player> players;
@@ -25,24 +28,28 @@ namespace Poong.Forms
         private GamePhase phase;
         private Client client;
         private GameStateFragment initParameters;
-        public Form1(Game game=null)
+        public Form1(Game game = null)
         {
             InitializeComponent();
-            //GamePanel.Capture = true;
-                this.game = game == null ? new Poong.Engine.Game() : game;
-            //Game.ClockTicked += Game_ClockTicked;
+            string jsonConfig = File.ReadAllText("poongConfig.json");
+            poongConfig = Newtonsoft.Json.JsonConvert.DeserializeObject<Poong.Engine.Configuration>(jsonConfig);
+            this.game = game == null ? new Poong.Engine.Game(poongConfig) : game;
+            GamePanel.Width = (int)(poongConfig.HorizontalHalfSize * 2 * pixelsPerGameUnit);
+            GamePanel.Height = (int)(poongConfig.VerticalHalfSize * 2 * pixelsPerGameUnit);
             client = this.game.Connect(
-                GamePanel.Width / 2.0f,
-                GamePanel.Height / 2.0f,
-                GamePanel.Height / 2.0f,
-                GamePanel.Height / 2.0f,
-                "Human");
+                poongConfig.HorizontalHalfSize * pixelsPerGameUnit,
+                poongConfig.VerticalHalfSize * pixelsPerGameUnit,
+                pixelsPerGameUnit,
+                pixelsPerGameUnit);
+            this.game.Join(client, "Human");
             initParameters = client.State;
 
             this.game.ClockTicked += Game_ClockTicked;
             client.StateChanged += Client_StateChanged;
-
+            client.NotificationReceived += Client_NotificationReceived;
         }
+
+
 
         protected override void OnHandleCreated(EventArgs e)
         {
@@ -125,9 +132,9 @@ namespace Poong.Forms
                     if (state.NewPhase != null)
                     {
                         if (state.NewPhase != GamePhase.Endgame)
-                            messagesLabel.Text = $"Round {round}: {state.NewPhase.ToString()}";
+                            phaseLabel.Text = $"Round {round}: {state.NewPhase.ToString()}";
                         else
-                            messagesLabel.Text = $"Winner: {state.Players.Single(player => player.Side != Side.None).Name}";
+                            phaseLabel.Text = $"Winner: {state.Players.Single(player => player.Side != Side.None).Name}";
                         phase = state.NewPhase.Value;
                     }
                     if (state.Players != null)
@@ -138,7 +145,7 @@ namespace Poong.Forms
                     }
                     GamePanel.Invalidate();
                 });
-                    client.TryGiveInput(lastMousePosition.X, lastMousePosition.Y);
+                client.TryGiveInput(lastMousePosition.X, lastMousePosition.Y);
                 playerPositions = state.PlayerPositions.Select(position => new Point((int)position.X, (int)position.Y)).ToList();
 
 
@@ -148,7 +155,13 @@ namespace Poong.Forms
                 throw;
             }
         }
-
+        private void Client_NotificationReceived(object sender, string e)
+        {
+            Invoke((MethodInvoker)delegate
+            {
+                messagesLabel.Text = e;
+            });
+        }
         private void GamePanel_MouseMove(object sender, MouseEventArgs e)
         {
             lastMousePosition = e.Location;
