@@ -5,6 +5,9 @@
     --game-height: unset;
     --body-color: unset;
     --background-color: unset;
+
+    --field-width: calc(var(--pixels-per-game-unit)*var(--game-width));
+    --field-height: calc(var(--pixels-per-game-unit)*var(--game-height));
 }
 
 .backdrop {
@@ -25,8 +28,8 @@
 
 .field {
     position: absolute;
-    min-width: calc(var(--pixels-per-game-unit)*var(--game-width));
-    min-height: calc(var(--pixels-per-game-unit)*var(--game-height));
+    min-width: var(--field-width);
+    min-height: var(--field-height);
 }
 
     .field .wall {
@@ -101,26 +104,42 @@
 .text {
     text-shadow: 0 0 4px var(--body-color);
     color: var(--body-color);
-    position: absolute;
     width: 100%;
     font: 16px monospace;
-    text-align: center;
-    white-space: nowrap;
+    user-select: none;
 }
-
-.message {
-    top: -28px;
-}
-
-.toolbar {
-    bottom: -28px;
-    display:flex;
-}
-
-    .toolbar a:not([href]):not([tabindex]) {
+.link {
         text-decoration: underline;
         padding: 0 4px;
     }
+.message {
+    position: absolute;
+    top: -28px;
+    white-space: nowrap;
+    justify-content: center;
+    display: flex;
+}
+
+.toolbar {
+    position: absolute;
+    bottom: -28px;
+    display: flex;
+    text-align: center;
+}
+
+.help {
+    background: var(--background-color);
+    position: absolute;
+    width: 100%;
+    height: var(--field-height);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.help-inner {
+    width: var(--field-width);
+    margin:auto;
+}
 
 .console {
     list-style: none;

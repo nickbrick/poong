@@ -44,6 +44,7 @@
               IsBlinking="@ViewModel.Balls.First().IsBlinking">
         </Body>
     </div>
+    <canvas id="players-overlay" class="players-overlay" oncontextmenu="return false;"></canvas>
     <div class="field">
         <div class="text message flicker">@ViewModel.Message</div>
         <div class="wall glow flicker top"></div>
@@ -51,11 +52,11 @@
         <div class="text toolbar flicker">
             <span>[@(ViewModel.Client.Player.Side)] @(ViewModel.Client.Player.Name) (@(ViewModel.Client.Player.Score)) - @(ViewModel.Client.Player.Rank.ToOrdinalString())</span>
             <span style="flex:auto;">| Poong alpha @System.Environment.GetEnvironmentVariable("HEROKU_RELEASE_VERSION") |</span>
-            <a>Help</a>
-            <a>GitHub</a>
+            <span class="link" @onclick="@ShowHelp">Help</span>
+            <span class="link">GitHub</span>
         </div>
     </div>
-    <canvas id="players-overlay" class="players-overlay" oncontextmenu="return false;"></canvas>
+    <Help @ref="@HelpComponent"></Help>
 </div>
 @using Poong.Engine;
 @using System.Drawing;
@@ -66,6 +67,7 @@
     public IJSRuntime JSRuntime { get; set; }
     public ViewModel ViewModel = new ViewModel();
     private int Hue = new Random().Next(300, 540);
+    private Poong.Blazor.Shared.Help HelpComponent;
     public GameComponent()
     {
 
@@ -140,6 +142,10 @@
     internal async Task SetDocumentTitle()
     {
         await JSRuntime.InvokeVoidAsync("setDocumentTitle", $"P{"oooooooooooooooo".Substring(0, ViewModel.Round)}ng");
+    }
+    internal void ShowHelp()
+    {
+        HelpComponent.Show();
     }
     void IDisposable.Dispose()
     {

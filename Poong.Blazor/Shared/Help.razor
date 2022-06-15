@@ -1,0 +1,29 @@
+﻿@if (Visible)
+{
+    <div class="help">
+        <div class="help-inner">
+            <p class="text flicker">How to play:</p>
+            <p class="text flicker">
+                In Poong, each paddle is controlled by multiple players, assuming the average vertical position of every player on its side.<br />
+                <br />
+                With every hit, the paddles shrink. Hitting the ball away from the paddle's center deflects it more.
+                Hitting the ball with the side of the paddle deflects it even more, and prevents the paddle from shrinking.<br />
+                The paddles will do a power hit as they shrink to nothingness.
+                <br />
+            </p>
+            <p @onclick="Hide" class="text flicker link">Okay</p>
+        </div>
+    </div>
+}
+@code {
+    private bool Visible { get; set; }
+    public void Hide()
+    {
+        Visible = false;
+    }
+    public void Show()
+    {
+        Visible = true;
+        StateHasChanged();
+    }
+}
