@@ -53,7 +53,7 @@
             <span>[@(ViewModel.Client.Player.Side)] @(ViewModel.Client.Player.Name) (@(ViewModel.Client.Player.Score)) - @(ViewModel.Client.Player.Rank.ToOrdinalString())</span>
             <span style="flex:auto;">| Poong alpha @System.Environment.GetEnvironmentVariable("HEROKU_RELEASE_VERSION") |</span>
             <span class="link" @onclick="@ShowHelp">Help</span>
-            <span class="link">GitHub</span>
+            <span class="link" onclick="window.open('https://github.com/nickbrick/poong', '_blank').focus();">GitHub</span>
         </div>
     </div>
     <Help @ref="@HelpComponent"></Help>
