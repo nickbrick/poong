@@ -19,9 +19,19 @@ namespace Poong.Blazor
         internal static readonly int PixelsPerGameUnit = 200;
         public static void Main(string[] args)
         {
-            string jsonConfig = File.ReadAllText("poongConfig.json");
-            var poongConfig = Newtonsoft.Json.JsonConvert.DeserializeObject<Poong.Engine.Configuration>(jsonConfig);
-            Game = new Game(poongConfig);
+            Configuration poongConfig = new Configuration();
+            string jsonConfig;
+            try
+            {
+                jsonConfig = System.Environment.GetEnvironmentVariable("POONG_CONFIG");
+                poongConfig = Newtonsoft.Json.JsonConvert.DeserializeObject<Poong.Engine.Configuration>(jsonConfig);
+            }
+            catch
+            {
+                jsonConfig = File.ReadAllText("poongConfig.json");
+                poongConfig = Newtonsoft.Json.JsonConvert.DeserializeObject<Poong.Engine.Configuration>(jsonConfig);
+            }
+                Game = new Game(poongConfig);
             CreateHostBuilder(args).Build().Run();
         }
 
