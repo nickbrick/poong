@@ -51,7 +51,7 @@
         <div class="wall glow flicker bottom"></div>
         <div class="text toolbar flicker">
             <span>[@(ViewModel.Client.Player.Side)] @(ViewModel.Client.Player.Name) (@(ViewModel.Client.Player.Score)) - @(ViewModel.Client.Player.Rank.ToOrdinalString())</span>
-            <span style="flex:auto;">| Poong alpha @System.Environment.GetEnvironmentVariable("HEROKU_RELEASE_VERSION") |</span>
+            <span style="flex:auto;">| Poong beta @System.Environment.GetEnvironmentVariable("HEROKU_RELEASE_VERSION") |</span>
             <span class="link" @onclick="@ShowHelp">Help</span>
             <span class="link" onclick="window.open('https://github.com/nickbrick/poong', '_blank').focus();">GitHub</span>
         </div>
