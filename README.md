@@ -16,6 +16,6 @@ Quick class overview:
 # Poong.Forms
 A basic single player desktop implementation in WinForms for testing the engine.
 # Poong.Blazor
-The actual Blazor Server web app implementation. The ball and paddles are implemented as Blazor components wrapped around HTML elements. Their positions are interpolated using CSS animations. Players are rendered on an HTML canvas overlay using JS interop.
+The actual Blazor Server web app implementation. The ball and paddles are implemented as Blazor components wrapped around HTML elements. Their positions are interpolated using CSS animations. Players are rendered on an HTML canvas overlay using JS interop. The current `Client` instance, references to the frontend's Blazor components and everything else regarding the state of the game are contained inside a `ViewModel` object in the Blazor app backend, and everything on the view goes through that (although this approach probably disagrees with the Blazor idiom).
 # Try it
 https://pooooooooooooooooooooooooooong.herokuapp.com/
